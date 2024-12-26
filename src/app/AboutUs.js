@@ -32,7 +32,7 @@ const AboutUs = () => {
                         data-aos="fade-up"
                         data-aos-duration="3000"
                     >
-                        LLLocated in the heart of DHA Phase 6, Lahore, 7 Oaks Dental Practice is dedicated to providing international-grade dental care to Pakistan. Our mission is to deliver the highest standards in oral healthcare, ensuring our patients don’t need to settle for less. With a state-of-the-art facility and a compassionate approach, we offer comprehensive dental services ranging from routine check-ups to advanced restorative treatments.
+                        Located in the heart of DHA Phase 6, Lahore, 7 Oaks Dental Practice is dedicated to providing international-grade dental care to Pakistan. Our mission is to deliver the highest standards in oral healthcare, ensuring our patients don’t need to settle for less. With a state-of-the-art facility and a compassionate approach, we offer comprehensive dental services ranging from routine check-ups to advanced restorative treatments.
                         We believe in creating a comfortable and stress-free environment, where cutting-edge technology meets expert care. Whether you’re looking for preventive care or cosmetic enhancements, 7 Oaks Dental Practice is here to help you achieve optimal oral health and a confident smile.
                     </Typography>
                 </div>
