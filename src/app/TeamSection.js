@@ -37,7 +37,7 @@ const TeamSection = () => {
         
         <Typography
           variant="paragraph"
-          className="font-poppins lg:text-lg py-4 text-blue-gray-800 dark:text-white"
+          className="font-poppins lg:text-lg py-4 px-10 text-blue-gray-800 dark:text-white"
           data-aos="fade-down"
           data-aos-duration="3000"
         >
@@ -45,7 +45,7 @@ const TeamSection = () => {
         </Typography>
       </div>
       <div className="flex justify-center" data-aos="fade-up" data-aos-duration="3000">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-16 justify-items-center py-2">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-24 justify-items-center py-2">
           {teamMembers.map((member, index) => (
             <InfoCard
               key={index}

@@ -25,7 +25,7 @@ const CountsSection = () => {
           Our Numbers Speak for Themselves
         </Typography>
       </div>
-      <div className=" w-4/5 mx-auto ">
+      <div className=" w-2/3 mx-auto ">
         <CountUpC stats={statsData} />
       </div>
     </div>

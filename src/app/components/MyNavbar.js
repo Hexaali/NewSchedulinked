@@ -107,8 +107,8 @@ function TopList() {
             d="M3 8l9 6 9-6"
           />
         </svg>
-        <a href="mailto:Manuella7708@gmail.com" className="text-white hover:text-brown-50 transition-colors mr-20 ">
-          Manuella7708@gmail.com
+        <a href="mailto:Hello@7oaksDental.com" className="text-white hover:text-brown-50 transition-colors mr-20 ">
+          Hello@7oaksDental.com
         </a>
         <div className="flex items-center gap-2 text-xs">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} className="h-6 w-6 text-brown-200 ml-20">

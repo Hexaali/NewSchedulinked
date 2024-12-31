@@ -78,7 +78,7 @@ const Carousel = ({ reviews }) => {
               onDragStart={(e) => e.preventDefault()}
               className={`px-4 transition-opacity transform duration-300 ease-in-out ${getSlideClasses(index)}`}
             >
-              <div className="flex flex-col items-center bg-brown-100 dark:bg-gray-700 dark: [hover:bg-gray-800] rounded-3xl shadow-md p-6 w-full max-w-sm mx-auto md:max-w-none">
+              <div className="flex flex-col items-center bg-brown-100 dark:bg-gray-700 rounded-3xl shadow-md p-6 w-full max-w-sm mx-auto md:max-w-none">
                 <div className="flex flex-col items-center text-center md:w-1/3">
                   <Image src={review.image} alt={review.name} width={70} height={70} className="rounded-full" />
                   <div className="flex items-center mt-3">

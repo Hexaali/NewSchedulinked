@@ -1,5 +1,4 @@
 "use client";
-
 import {
   Card,
   CardHeader,
@@ -11,7 +10,7 @@ import {
 
 export function InfoCard({ imageSrc, name, title }) {
   return (
-    <Card className="items-center w-72 bg-brown-100 dark:bg-gray-700">
+    <Card className="items-center w-80 bg-brown-100 dark:bg-gray-700">
       <CardHeader floated={false} className="flex h-40 w-40 items-center rounded-full">
         <img className="rounded-full scale-150" src={imageSrc} alt={`${name}'s profile picture` } />
       </CardHeader>
