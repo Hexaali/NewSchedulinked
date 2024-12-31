@@ -49,7 +49,7 @@ export function MyFooter() {
             <div className="text-sm md:text-xs">
               <p>
                 <span className="font-semibold text-white">Phone:</span> <a href="tel:+92 3414114142" className="text-brown-200  hover:underline">+92 3414114142</a><br />
-                <span className="font-semibold text-white">Email: </span><a href="Manuella7708@gmail.com" className="text-brown-200 hover:underline">Manuella7708@gmail.com</a>
+                <span className="font-semibold text-white">Email: </span><a href="Hello@7oaksDental.com" className="text-brown-200 hover:underline">Hello@7oaksDental.com</a>
               </p>
             </div>
           </div>
