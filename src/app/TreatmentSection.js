@@ -28,9 +28,9 @@ const TreatmentSection = () => {
                         data-aos="fade-up"
                         data-aos-duration="3000"
                         variant="paragraph"
-                        className="text-base sm:text-xl md:text-2xl lg:text-xl mb-4 font-poppins text-gray-800 dark:text-white pt-10"
+                        className=" sm:text-xl md:text-2xl lg:text-lg mb-4 font-poppins text-gray-800 dark:text-white pt-10"
                     >
-                        At 7 Oaks Dental Practice, we combine cutting-edge technology with a patient-first approach to ensure your dental experience is seamless, comfortable, and virtually pain-free. Our advanced digital X-rays and 3D imaging systems provide precise diagnostics while minimising radiation exposure, prioritising both accuracy and your safety. Understanding that dental anxiety is one of the greatest challenges patients face, we specialise in painless dentistry. Using gentle techniques, modern anaesthetics, and minimally invasive tools, we ensure your treatments are as stress-free as possible.
+                        At 7 Oaks Dental Practice, we combine cutting edge technology with a patient. First approach to ensure your dental experience is seamless, comfortable, and virtually pain free. Our advanced digital Xrays and 3D imaging systems provide precise diagnostics while minimising radiation exposure, prioritising both accuracy and your safety. Understanding that dental anxiety is one of the greatest challenges patients face, we specialise in painless dentistry. Using gentle techniques, modern anaesthetics, and minimally invasive tools, we ensure your treatments are as stress free as possible.
                     </Typography>
                 </div>
                 <div className="w-full lg:w-1/2 flex items-center justify-center">

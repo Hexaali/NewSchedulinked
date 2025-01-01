@@ -37,7 +37,7 @@ const TeamSection = () => {
         
         <Typography
           variant="paragraph"
-          className="font-poppins lg:text-lg py-4 px-10 text-blue-gray-800 dark:text-white"
+          className="font-poppins lg:text-lg py-4 px-24 text-blue-gray-800 dark:text-white"
           data-aos="fade-down"
           data-aos-duration="3000"
         >
