@@ -5,17 +5,17 @@ import { InfoCard } from "./components/InfoCard";
 
 const teamMembers = [
   {
-    imageSrc: "/7oaks/image2.jpg",
+    imageSrc: "/image2.jpg",
     name: "Dr. Omer Bin Zahid",
     title: "Dr. Omer Bin Zahid is a dedicated dental professional with a passion for creating healthy, confident smiles. A graduate of de'Montmorency College of Dentistry, he further honed his expertise with a postgraduate qualification from the Royal College of Surgeons in Ireland, and has a special interest in endodontics and restorative dentistry. Dr. Omer’s patient-centered approach and commitment to excellence ensure every treatment is delivered with precision, care, and compassion.",
   },
   {
-    imageSrc: "/7oaks/Dajwa.jpg",
+    imageSrc: "/Dajwa.jpg",
     name: "Dr. Ajwa Rehman",
     title: "Dr. Ajwa Rehman is a skilled dentist committed to transforming smiles with precision and care. A graduate of de'Montmorency College of Dentistry, she pursued her postgraduate degree at the Royal College of Surgeons in Ireland. She has a special interest in Orthodontics. With a keen eye for detail and a passion for creating balanced, beautiful smiles, Dr. Ajwa ensures her patients feel confident every step of the way.",
   },
   {
-    imageSrc:"/7oaks/image1.jpg",
+    imageSrc:"/image1.jpg",
     name: "Ahsan Nadeem",
     title: "As the hygienist at 7 Oaks Dental Practice, Ahsan Nadeem plays a vital role in maintaining the oral health of our patients. With his gentle approach and expertise in preventive care, Ahsan helps patients achieve healthier smiles through personalised cleaning treatments and education on maintaining excellent dental hygiene at home. ",
   }

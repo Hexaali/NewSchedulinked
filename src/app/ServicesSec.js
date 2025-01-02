@@ -4,14 +4,14 @@ import MyCard from './components/MyCard';
 import { Typography } from '@material-tailwind/react';
 
 const cardData = [
-    { imageSrc: '/7oaks/implant.png', altText: 'Implant Logo', title: 'General Dentistry' },
-    { imageSrc: '/7oaks/ortho.png', altText: 'Cosmetic Dentistry Logo', title: 'Cosmetic Dentistry' },
-    { imageSrc: '/7oaks/Cosmetic.png', altText: 'Restorative Dentistry Logo', title: 'Restorative Dentistry' },
-    { imageSrc: '/7oaks/noun-teeth.png', altText: 'Orthodontics Logo', title: 'Orthodontics' },
-    { imageSrc: '/7oaks/rootcanal.png', altText: 'Endodontics Logo', title: 'Endodontics' },
-    { imageSrc: '/7oaks/Crown.png', altText: 'Periodontics Logo', title: 'Periodontics' },
-    { imageSrc: '/7oaks/cavity.png', altText: 'Pediatric Dentistry Logo', title: 'Pediatric Dentistry' },
-    { imageSrc: '/7oaks/oralll.png', altText: 'Oral Surgery Logo', title: 'Oral Surgery' },
+    { imageSrc: '/implant.png', altText: 'Implant Logo', title: 'General Dentistry' },
+    { imageSrc: '/ortho.png', altText: 'Cosmetic Dentistry Logo', title: 'Cosmetic Dentistry' },
+    { imageSrc: '/Cosmetic.png', altText: 'Restorative Dentistry Logo', title: 'Restorative Dentistry' },
+    { imageSrc: '/noun-teeth.png', altText: 'Orthodontics Logo', title: 'Orthodontics' },
+    { imageSrc: '/rootcanal.png', altText: 'Endodontics Logo', title: 'Endodontics' },
+    { imageSrc: '/Crown.png', altText: 'Periodontics Logo', title: 'Periodontics' },
+    { imageSrc: '/cavity.png', altText: 'Pediatric Dentistry Logo', title: 'Pediatric Dentistry' },
+    { imageSrc: '/oralll.png', altText: 'Oral Surgery Logo', title: 'Oral Surgery' },
 ];
 
 const ServicesSec = () => {

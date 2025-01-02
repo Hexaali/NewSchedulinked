@@ -35,7 +35,7 @@ const TreatmentSection = () => {
                 </div>
                 <div className="w-full lg:w-1/2 flex items-center justify-center">
                     <Image
-                        src="/7oaks/DentistT.png"
+                        src="/DentistT.png"
                         alt="Dentist"
                         width={450}
                         height={200}

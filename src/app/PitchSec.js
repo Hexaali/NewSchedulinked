@@ -2,9 +2,9 @@ import React from "react";
 import SecImagesCarousel from "./components/SecImagesCarousel";
 
 const images = [
-  "/7oaks/1.jpg",
-  "/7oaks/2.jpg",
-  "/7oaks/3.jpg",
+  "/1.jpg",
+  "/2.jpg",
+  "/3.jpg",
 ];
 const texts = [
   { 

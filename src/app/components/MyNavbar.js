@@ -151,7 +151,7 @@ export default function MyNavbar() {
     <Navbar blurred={false} fullWidth={true} className="sticky top-0 bg-brown-100 z-20 mx-auto max-w-screen-3xl px-4 py-2 dark:bg-gray-700 dark:text-gray-100">
       <div className="flex items-center justify-between ">
         <div className="relative flex items-center">
-          <img src="/7oaks/logo.png" alt="Logo" className="h-28 w-28 lg:ml-8" />
+          <img src="/logo.png" alt="Logo" className="h-28 w-28 lg:ml-8" />
           <Typography
             variant="small"
             className="
