@@ -1,7 +1,12 @@
-"use client";
+"use client"; 
+
 import React, { useState } from "react";
+import axios from "axios";
+import Turnstile from "react-turnstile"; 
 import { Button, Dialog, Card, CardBody, CardFooter, Typography, Input, Select, Option } from "@material-tailwind/react";
-import { Link } from "react-scroll"; // Import Link from react-scroll
+import { Link } from "react-scroll";
+
+const API_URL = "http://localhost:5000/api/send-email"; 
 
 const defaultFormFields = {
   title: "Book Appointment",
@@ -15,123 +20,113 @@ const defaultFormFields = {
 
 export function MyButton({
   btnText,
-  withForm = false, // Default is false
+  withForm = false,
   formFields = defaultFormFields,
-  scrollTo = "", // Scroll target section ID
-  buttonClasses = "", // Custom button classes
-  dialogClasses = "", // Custom dialog classes
+  scrollTo = "",
+  buttonClasses = "",
+  dialogClasses = "",
 }) {
   const [open, setOpen] = useState(false);
-  const [selectedService, setSelectedService] = useState("");
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    service: "",
+    captchaToken: "",
+  });
+  const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleServiceChange = (service) => {
-    setSelectedService(service);
+  // Handle form input changes
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleClick = () => {
-    if (withForm) {
-      setOpen(true); // Open form dialog
+  // Handle service dropdown change
+  const handleServiceChange = (service) => {
+    setFormData({ ...formData, service });
+  };
+
+  // Handle CAPTCHA token retrieval
+  const handleCaptchaSuccess = (token) => {
+    console.log("Turnstile Token:", token); 
+    setFormData({ ...formData, captchaToken: token });
+  };
+
+  // Submit form with CAPTCHA validation
+  const handleSubmit = async () => {
+    if (!formData.name || !formData.email || !formData.phone || !formData.service || !formData.captchaToken) {
+      setMessage("All fields and CAPTCHA are required.");
+      return;
+    }
+
+    setLoading(true);
+    setMessage("");
+
+    try {
+      const response = await axios.post(API_URL, formData);
+      if (response.status === 200) {
+        setMessage("Email sent successfully!");
+        setFormData({ name: "", email: "", phone: "", service: "", captchaToken: "" });
+        setTimeout(() => {
+          setOpen(false);
+          setMessage("");
+        }, 2000);
+      } else {
+        setMessage(response.data.message || "Failed to send email.");
+      }
+    } catch (error) {
+      setMessage("Network error. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <>
-      {/* If scrollTo prop is passed, use Link for scrolling */}
       {scrollTo ? (
         <Link to={scrollTo} smooth={true} offset={-70} duration={500}>
-          <Button
-            className={`py-4 px-8 rounded-full transition duration-300 flex items-center justify-center gap-2 group ${buttonClasses}`}
-          >
+          <Button className={`py-4 px-8 rounded-full ${buttonClasses}`}>
             {btnText}
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={2}
-              stroke="currentColor"
-              className="h-5 w-5 transition-transform duration-300 ease-in-out transform group-hover:translate-x-1"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3"
-              />
-            </svg>
           </Button>
         </Link>
       ) : (
-        <Button
-          className={`py-4 px-8 rounded-full transition duration-300 flex items-center justify-center gap-2 group ${buttonClasses}`}
-          onClick={handleClick}
-        >
+        <Button className={`py-4 px-8 rounded-full ${buttonClasses}`} onClick={() => setOpen(true)}>
           {btnText}
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={2}
-            stroke="currentColor"
-            className="h-5 w-5 transition-transform duration-300 ease-in-out transform group-hover:translate-x-1"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3"
-            />
-          </svg>
         </Button>
       )}
 
-      {/* Only render the form dialog if `withForm` is true */}
       {withForm && (
-        <Dialog
-          size="md"
-          open={open}
-          handler={() => setOpen(false)}
-          className={`bg-transparent shadow-none ${dialogClasses}`} // Use custom dialog classes
-        >
+        <Dialog size="md" open={open} handler={() => setOpen(false)} className={dialogClasses}>
           <Card className="mx-auto w-full max-w-[24rem]">
             <CardBody className="flex flex-col gap-4">
-              <Typography variant="h4" className="text-brown-200">
-                {formFields.title}
-              </Typography>
-              <Typography className="mb-3 font-normal text-brown-100" variant="paragraph">
-                {formFields.description}
-              </Typography>
-              
-              <Input label={formFields.NamePlaceHolder} size="lg" />
-              <Input label={formFields.EmailPlaceholder} size="lg" />
-              <Input label={formFields.PhoneNumberPlaceHolder} size="lg" />
-              
-              <Typography className="text-brown-300" variant="h6">
-                {formFields.Service}
-              </Typography>
-              <Select
-                label="Choose Procedure"
-                onChange={(value) => handleServiceChange(value)}
-              >
+              <Typography variant="h4">{formFields.title}</Typography>
+              <Typography className="mb-3">{formFields.description}</Typography>
+
+              <Input label={formFields.NamePlaceHolder} name="name" size="lg" value={formData.name} onChange={handleChange} />
+              <Input label={formFields.EmailPlaceholder} name="email" size="lg" value={formData.email} onChange={handleChange} />
+              <Input label={formFields.PhoneNumberPlaceHolder} name="phone" size="lg" value={formData.phone} onChange={handleChange} />
+
+              <Typography variant="h6">{formFields.Service}</Typography>
+              <Select label="Choose Procedure" value={formData.service} onChange={(e) => handleServiceChange(e)}>
                 <Option value="Dental Checkup">Dental Checkup</Option>
                 <Option value="Teeth Whitening">Teeth Whitening</Option>
                 <Option value="Orthodontics">Orthodontics</Option>
-                <Option value="Cosmetic Dentistry">Cosmetic Dentistry</Option>
-                <Option value="Gum Disease">Gum Disease</Option>
-                <Option value="Cavity">Cavity</Option>
-                <Option value="Braces">Braces</Option>
-                <Option value="Root Canal">Root Canal</Option>
               </Select>
+
+              
+              <Turnstile
+                sitekey="0x4AAAAAAA8zB_fFtXg8ix3N"
+                onVerify={handleCaptchaSuccess}
+                theme="light"
+              />
+
+              {message && <Typography className={`text-${message.includes("success") ? "green" : "red"}-500`}>{message}</Typography>}
             </CardBody>
 
-            <CardFooter className="pt-0">
-              <Button
-                variant="gradient"
-                className="bg-brown-50 text-brown-50"
-                onClick={() => {
-                  console.log("Selected Service:", selectedService);
-                  setOpen(false);
-                }}
-                fullWidth
-              >
-                {formFields.submitText}
+            <CardFooter>
+              <Button onClick={handleSubmit} fullWidth disabled={loading}>
+                {loading ? "Submitting..." : formFields.submitText}
               </Button>
             </CardFooter>
           </Card>

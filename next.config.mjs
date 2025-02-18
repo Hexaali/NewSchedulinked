@@ -1,10 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-
-    basePath: '/7oaks',
-    assetPrefix: '/7oaks/',
+    
+    output: "export",
     images: { unoptimized: true },
-    output: 'export',
+    
 
 };
 
