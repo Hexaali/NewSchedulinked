@@ -1,28 +1,18 @@
-"use client"
+import { UserProvider } from "./context/UserContext";
+import { ThemeProvider } from "./context/ThemeContext"; 
 import "./globals.css";
-import { useEffect } from "react";
-import MyNavbar from "./components/MyNavbar";
-import { MyFooter } from "./components/MyFooter";
-import { ThemeProvider } from "./ThemeContext";
-import 'aos/dist/aos.css'; // Import AOS styles
-import AOS from 'aos';
+import Navbar from "./components/Navbar";
 
 export default function RootLayout({ children }) {
-
-        useEffect(() => {
-          AOS.init({
-            duration: 1000, // Optional: Set the default duration for animations
-          });
-        }, []);
-
   return (
-    <html lang="en">
-      <body>
-        <ThemeProvider>
-          <MyNavbar />
-          {children}
-          <MyFooter />
-        </ThemeProvider>
+    <html lang="en" suppressHydrationWarning>
+      <body className="font-helvetica">
+        <UserProvider>
+          <ThemeProvider>
+            <Navbar />
+            {children}
+          </ThemeProvider>
+        </UserProvider>
       </body>
     </html>
   );
