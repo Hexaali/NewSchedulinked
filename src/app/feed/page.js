@@ -1,5 +1,5 @@
 "use client";
-// import Link from "next/link";
+
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import EventFeed from "../components/EventFeed";
@@ -59,7 +59,10 @@ export default function Feed() {
   };
 
   return (
-    <div className="flex lg:flex-row pt-20 dark:bg-gray-950 dark:bg-black">
+    <div className="flex lg:flex-row pt-20 bg-gradient-to-br from-white via-green-100 to-yellow-100 
+      dark:from-black dark:via-green-900 dark:to-yellow-800 
+      transition-all duration-500">
+        
   {/* Event Feed Section (Scrollable) */}
   <div className="w-full lg:w-3/5 pt-40 lg:pt-6 p-6 overflow-y-auto flex flex-col items-center mt-2 relative z-10">
     <EventFeed events={events} loading={loading} error={error} />
@@ -67,11 +70,11 @@ export default function Feed() {
 
   {/* Profile Card Section (UNCHANGED on mobile, adjusted for desktop) */}
   {user && (
-    <div className="fixed top-20 left-0 right-0 z-20 flex justify-center items-start pt-3
-                   lg:fixed lg:right-6 lg:top-1/2 lg:left-auto lg:transform lg:-translate-y-1/2 lg:pr-60">
-      <ProfileCard user={user} />
-    </div>
-  )}
+  <div className="fixed top-20 left-0 right-0 z-20 flex justify-center items-start pt-3
+                  xl:pr-16 lg:top-1/2 lg:left-auto lg:right-10 lg:transform lg:-translate-y-1/2 lg:justify-end">
+    <ProfileCard user={user} />
+  </div>
+)}
 
   {/* Add Event Button (unchanged) */}
   <div className="fixed bottom-6 right-6 z-50">

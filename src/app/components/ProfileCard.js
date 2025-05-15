@@ -29,7 +29,7 @@ export default function ProfileCard({ user }) {
         setTimeout(() => setCopied(false), 2000);
       }).catch(() => alert("Failed to copy"));
     } else {
-      // Fallback for older or unsupported browsers
+      
       const textArea = document.createElement("textarea");
       textArea.value = profileURL;
       textArea.style.position = "fixed";  // avoid scrolling to bottom
@@ -51,7 +51,7 @@ export default function ProfileCard({ user }) {
   return (
     <Card
       onClick={handleCardClick}
-       className="w-72 lg:w-80 lg:h-72 flex items-center justify-between sm:flex-col sm:justify-center p-1 rounded-2xl shadow-md transition-all duration-300 hover:scale-[1.03] hover:shadow-yellow-200/40 dark:hover:shadow-green-200/30 bg-[linear-gradient(to_top_right,rgba(250,204,21,0.7),rgba(34,197,94,0.7))] backdrop-blur-md"
+       className="w-72 lg:w-80 xl:w-72 xl:h-70 lg:h-72 flex items-center justify-between sm:flex-col sm:justify-center p-1 rounded-2xl shadow-md transition-all duration-300 hover:scale-[1.03] hover:shadow-yellow-200/40 dark:hover:shadow-green-200/30 bg-[linear-gradient(to_top_right,rgba(250,204,21,0.7),rgba(34,197,94,0.7))] backdrop-blur-md"
      >
       {/* Profile Image */}
       <div className="relative w-16 h-16 sm:w-24 sm:h-24 rounded-full overflow-hidden border-4 border-white shadow-lg">

@@ -13,11 +13,12 @@ export default function Navbar() {
   const [darkMode, setDarkMode] = useState(false);
   const [openSignUp, setOpenSignUp] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [hasUserQuery, setHasUserQuery] = useState(false);
 
   const [alert, setAlert] = useState({
     show: false,
     message: "",
-    type: "green", 
+    type: "green",
   });
 
   useEffect(() => {
@@ -29,6 +30,12 @@ export default function Navbar() {
 
     const loggedIn = localStorage.getItem("isLoggedIn") === "true";
     setIsLoggedIn(loggedIn);
+
+    // Safely access window and URLSearchParams on the client
+    if (typeof window !== "undefined") {
+      const searchParams = new URLSearchParams(window.location.search);
+      setHasUserQuery(searchParams.has("u"));
+    }
   }, []);
 
   const toggleTheme = () => {
@@ -116,15 +123,11 @@ export default function Navbar() {
         </div>
 
         <div className="flex items-center justify-end gap-4 sm:gap-6 md:gap-10 ml-auto">
-          {(() => {
-            // Check if the URL contains `?u=...`
-            const searchParams = typeof window !== "undefined" ? new URLSearchParams(window.location.search) : null;
-            const hasUserQuery = searchParams?.has("u");
-
-            // Hide buttons on /?u=... only
-            if (pathname === "/" && hasUserQuery) return null;
-
-            return isLoggedIn ? (
+          {/* Conditional rendering moved out of JSX scope */}
+          {!(
+            pathname === "/" && hasUserQuery
+          ) && (
+            isLoggedIn ? (
               <Button
                 onClick={handleLogout}
                 className="text-xs sm:text-sm md:text-base bg-red-500 text-white font-bold px-4 sm:px-5 md:px-6 py-2 sm:py-2.5 md:py-3 rounded-lg shadow-md hover:scale-105 transition-transform"
@@ -138,8 +141,8 @@ export default function Navbar() {
               >
                 Sign In
               </Button>
-            );
-          })()}
+            )
+          )}
 
           <div className="scale-90 sm:scale-100">
             <LightDarkButton />

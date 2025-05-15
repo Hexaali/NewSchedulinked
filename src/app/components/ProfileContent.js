@@ -1,3 +1,4 @@
+// components/ProfileContent.js
 "use client";
 
 import { useState, useEffect } from "react";
@@ -12,7 +13,6 @@ import {
   DialogFooter,
   Input,
   Spinner,
-  Alert,
 } from "@material-tailwind/react";
 
 export default function ProfileContent() {
@@ -23,8 +23,6 @@ export default function ProfileContent() {
   const [loading, setLoading] = useState(true);
   const [openModal, setOpenModal] = useState(false);
   const [formData, setFormData] = useState({ email: "", password: "" });
-  const [error, setError] = useState(null);
-  const [success, setSuccess] = useState(null);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -33,7 +31,6 @@ export default function ProfileContent() {
           router.push("/invalid-username/");
           return;
         }
-
         const res = await fetch(
           `https://schedulinked.kayman.biz/api/v1/profile/${username}`
         );
@@ -47,33 +44,8 @@ export default function ProfileContent() {
         setLoading(false);
       }
     };
-
     fetchUserData();
   }, [username, router]);
-
-  const handleGoogleAuthResponse = async (token) => {
-    try {
-      const response = await fetch("http://192.168.10.177:8000/api/v1/follow", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          google_token: token,
-          username: username,
-          email: userData?.email,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to save Google Calendar integration");
-      }
-
-      setSuccess("Google Calendar integration successful!");
-    } catch (err) {
-      setError(err.message);
-    }
-  };
 
   const getGoogleCalendarToken = () => {
     const CLIENT_ID =
@@ -82,76 +54,32 @@ export default function ProfileContent() {
     const SCOPES =
       "https://www.googleapis.com/auth/calendar https://www.googleapis.com/auth/userinfo.email";
 
-    const authUrl = `https://accounts.google.com/o/oauth2/auth?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=token&scope=${encodeURIComponent(
+    const authUrl = `https://accounts.google.com/o/oauth2/auth?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=code&state=${
+      userData.id
+    }&scope=${encodeURIComponent(
       SCOPES
-    )}&include_granted_scopes=true`;
+    )}&include_granted_scopes=true&access_type=offline&prompt=consent`;
 
-    const popup = window.open(authUrl, "googleAuth", "width=500,height=600");
-    const checkPopup = setInterval(() => {
-      try {
-        if (popup.closed) {
-          clearInterval(checkPopup);
-          return;
-        }
-
-        if (popup.location.href.includes(REDIRECT_URI)) {
-          const hash = popup.location.hash;
-          const token = new URLSearchParams(hash.substring(1)).get(
-            "access_token"
-          );
-          if (token) {
-            handleGoogleAuthResponse(token);
-            popup.close();
-            clearInterval(checkPopup);
-          }
-        }
-      } catch (e) {}
-    }, 500);
+    window.location.href = authUrl;
   };
 
-  const handleAppleCalendarSubmit = async () => {
-    try {
-      const hashedPassword = await hashPassword(formData.password);
-      console.log("Hashed Password:", hashedPassword);
-
-      const response = await fetch("http://192.168.10.177:8000/api/v1/follow", {
+  const handleAppleCalendarSubmit = () => {
+    if (formData.email && formData.password) {
+      const appleHash = btoa(formData.email + ":" + formData.password);
+      fetch("https://schedulinked.kayman.biz/api/v1/follow", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
         body: JSON.stringify({
+          apple_hash: appleHash,
+          artist: userData.id,
           email: formData.email,
-          apple_hash: hashedPassword,
         }),
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to save Apple Calendar integration");
-      }
-
-      setSuccess("Apple Calendar integration successful!");
-      setOpenModal(false);
-    } catch (err) {
-      setError(err.message);
+        headers: { "Content-Type": "application/json" },
+      })
+        .then((res) => res.json())
+        .then(console.log)
+        .catch(console.error);
     }
-  };
-
-  // Helper function to hash the password using SHA-256
-  const hashPassword = async (password) => {
-    // Encode the password into a Uint8Array
-    const encoder = new TextEncoder();
-    const data = encoder.encode(password);
-
-    // Create a hash using SHA-256
-    const hashBuffer = await crypto.subtle.digest("SHA-256", data);
-
-    // Convert ArrayBuffer to a hexadecimal string
-    const hashArray = Array.from(new Uint8Array(hashBuffer)); // Convert buffer to byte array
-    const hashHex = hashArray
-      .map((byte) => byte.toString(16).padStart(2, "0"))
-      .join(""); // Convert bytes to hex string
-
-    return hashHex;
+    setOpenModal(false);
   };
 
   if (!username) {
@@ -164,84 +92,86 @@ export default function ProfileContent() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900">
         <Spinner className="h-20 w-20 text-gray-900/50" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center dark:bg-gray-900 text-black dark:text-white p-6">
-      {error && (
-        <Alert color="red" className="mb-4 max-w-sm">
-          {error}
-        </Alert>
-      )}
-      {success && (
-        <Alert color="green" className="mb-4 max-w-sm">
-          {success}
-        </Alert>
-      )}
-
-      <div className="flex flex-col items-center gap-2">
-        <div className="relative w-28 h-28 mb-4">
-          <Image
-            src={userData?.image || "/london.jpg"}
-            alt="Profile Picture"
-            fill
-            className="object-fill rounded-full"
-            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 800px, 1200px"
-          />
+    <div
+      className="min-h-screen flex items-center justify-center p-6 
+      bg-gradient-to-br from-white via-green-100 to-yellow-100 
+      dark:from-black dark:via-green-900 dark:to-yellow-800 
+      transition-all duration-500"
+    >
+      {/* Transparent, blurred card */}
+      <div className="bg-white/10 dark:bg-black/10 backdrop-blur shadow-xl rounded-3xl p-8 w-full max-w-md text-center transition-all duration-300">
+        <div className="flex flex-col items-center gap-4">
+          <div className="relative w-28 h-28">
+            <Image
+              src={userData?.image || "/london.jpg"}
+              alt="Profile Picture"
+              fill
+              className="object-cover rounded-full shadow-md"
+              sizes="(max-width: 768px) 100vw, (max-width: 1024px) 800px, 1200px"
+            />
+          </div>
+          <Typography
+            variant="h5"
+            className="font-bold text-xl text-gray-900 dark:text-white"
+          >
+            @{userData?.username || "Username"}
+          </Typography>
         </div>
-        <Typography variant="h2" className="text-xl font-semibold">
-          @{userData?.username || "Username"}
-        </Typography>
-      </div>
 
-      <div className="flex flex-col gap-4 mt-4 w-full max-w-sm">
-        <Button
-          onClick={getGoogleCalendarToken}
-          className="flex items-center justify-center gap-2 bg-white text-black border border-gray-500 py-3 rounded-full hover:bg-gray-100 transition"
-        >
-          <Image src="/google.png" alt="Google" width={20} height={20} />
-          Add to Google Calendar
-        </Button>
-        <Button
-          onClick={() => setOpenModal(true)}
-          className="flex items-center justify-center gap-2 bg-white text-black border border-gray-500 py-3 rounded-full hover:bg-gray-100 transition"
-        >
-          <Image src="/apple.png" alt="Apple" width={20} height={20} />
-          Add to Apple Calendar
-        </Button>
+        <div className="flex flex-col gap-4 mt-6">
+          <Button
+            onClick={getGoogleCalendarToken}
+            className="flex items-center justify-center gap-2 bg-gradient-to-r from-green-500 to-yellow-400 text-white py-3 rounded-full shadow-md hover:opacity-90 transition"
+          >
+            <Image src="/google.png" alt="Google" width={20} height={20} />
+            Add to Google Calendar
+          </Button>
+          <Button
+            onClick={() => setOpenModal(true)}
+            className="flex items-center justify-center gap-2 bg-gradient-to-r from-gray-800 to-gray-600 text-white py-3 rounded-full shadow-md hover:opacity-90 transition"
+          >
+            <Image src="/apple.png" alt="Apple" width={20} height={20} />
+            Add to Apple Calendar
+          </Button>
+        </div>
       </div>
 
       <Dialog
         open={openModal}
         handler={() => setOpenModal(!openModal)}
-        className="bg-gradient-to-tr from-yellow-400 to-green-500"
+        className="dark:bg-gray-900 bg-white rounded-xl"
       >
-        <DialogHeader>Apple Calendar Login</DialogHeader>
-        <DialogBody>
-          <div className="flex flex-col gap-4">
-            <Input
-              label="Email / Apple ID"
-              type="email"
-              value={formData.email}
-              onChange={(e) =>
-                setFormData({ ...formData, email: e.target.value })
-              }
-            />
-            <Input
-              label="App Password"
-              type="password"
-              value={formData.password}
-              onChange={(e) =>
-                setFormData({ ...formData, password: e.target.value })
-              }
-            />
-          </div>
+        <DialogHeader className="text-xl font-semibold text-gray-800 dark:text-white">
+          Apple Calendar Login
+        </DialogHeader>
+        <DialogBody className="flex flex-col gap-4">
+          <Input
+            label="Email / Apple ID"
+            type="email"
+            value={formData.email}
+            color="blue"
+            onChange={(e) =>
+              setFormData({ ...formData, email: e.target.value })
+            }
+          />
+          <Input
+            label="App Password"
+            type="password"
+            value={formData.password}
+            color="blue"
+            onChange={(e) =>
+              setFormData({ ...formData, password: e.target.value })
+            }
+          />
         </DialogBody>
-        <DialogFooter>
+        <DialogFooter className="gap-2">
           <Button
             variant="text"
             color="gray"
@@ -249,7 +179,10 @@ export default function ProfileContent() {
           >
             Cancel
           </Button>
-          <Button color="blue" onClick={handleAppleCalendarSubmit}>
+          <Button
+            className="bg-blue-600 text-white"
+            onClick={handleAppleCalendarSubmit}
+          >
             Submit
           </Button>
         </DialogFooter>
