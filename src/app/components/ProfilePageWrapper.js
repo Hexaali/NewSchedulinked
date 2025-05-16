@@ -1,13 +1,17 @@
-// components/ProfilePageWrapper.js
-'use client'
+"use client";
 
-import { useSearchParams } from 'next/navigation'
-import LandingPage from './LandingPage'
-import ProfilePage from './ProfilePage'
+import { useParams } from "react-router-dom";
+import LandingPage from "./LandingPage";
+import ProfilePage from "./ProfilePage";
 
 export default function ProfilePageWrapper() {
-  const searchParams = useSearchParams()
-  const username = searchParams.get('u')
+  const { username } = useParams();
 
-  return username ? <ProfilePage username={username} /> : <LandingPage />
+  // If no username (e.g., just "/"), show landing page
+  if (!username) {
+    return <LandingPage />;
+  }
+
+  // Show profile for given username
+  return <ProfilePage username={username} />;
 }

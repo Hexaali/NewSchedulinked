@@ -1,8 +1,6 @@
-// components/ProfileContent.js
 "use client";
 
 import { useState, useEffect } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import {
   Button,
@@ -15,10 +13,7 @@ import {
   Spinner,
 } from "@material-tailwind/react";
 
-export default function ProfileContent() {
-  const searchParams = useSearchParams();
-  const router = useRouter();
-  const username = searchParams.get("u");
+export default function ProfileContent({ username }) {
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [openModal, setOpenModal] = useState(false);
@@ -28,8 +23,7 @@ export default function ProfileContent() {
     const fetchUserData = async () => {
       try {
         if (!username) {
-          router.push("/invalid-username/");
-          return;
+          return; // Don't redirect, just return early
         }
         const res = await fetch(
           `https://schedulinked.kayman.biz/api/v1/profile/${username}`
@@ -39,13 +33,13 @@ export default function ProfileContent() {
         setUserData(data);
       } catch (err) {
         console.error("Error fetching user data:", err);
-        router.push("/not-found/");
+        // Optionally show an error message instead of redirect
       } finally {
         setLoading(false);
       }
     };
     fetchUserData();
-  }, [username, router]);
+  }, [username]);
 
   const getGoogleCalendarToken = () => {
     const CLIENT_ID =
@@ -105,7 +99,6 @@ export default function ProfileContent() {
       dark:from-black dark:via-green-900 dark:to-yellow-800 
       transition-all duration-500"
     >
-      {/* Transparent, blurred card */}
       <div className="bg-white/10 dark:bg-black/10 backdrop-blur shadow-xl rounded-3xl p-8 w-full max-w-md text-center transition-all duration-300">
         <div className="flex flex-col items-center gap-4">
           <div className="relative w-28 h-28">

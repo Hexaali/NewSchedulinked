@@ -2,9 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import EventFeed from "../components/EventFeed";
-import AddEventButton from "../components/AddEventButton";
-import ProfileCard from "../components/ProfileCard";
+import EventFeed from "./EventFeed";
+import AddEventButton from "./AddEventButton";
+import ProfileCard from "./ProfileCard";
 
 export default function Feed() {
   const router = useRouter();

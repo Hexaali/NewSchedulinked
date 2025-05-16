@@ -21,7 +21,7 @@ export default function ProfileCard({ user }) {
 
   const handleCopy = (e) => {
     e.stopPropagation();
-    const profileURL = `${window.location.origin}/?u=${user.username}`;
+    const profileURL = `${window.location.origin}/${user.username}`;
   
     if (navigator.clipboard && navigator.clipboard.writeText) {
       navigator.clipboard.writeText(profileURL).then(() => {

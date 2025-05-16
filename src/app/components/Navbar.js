@@ -64,7 +64,7 @@ export default function Navbar() {
     localStorage.removeItem("user");
     setIsLoggedIn(false);
     showAlert("You have been logged out.", "green");
-    router.push("/");
+     window.location.href = "/";
   };
 
   const handleLogin = () => {

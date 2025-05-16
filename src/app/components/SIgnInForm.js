@@ -1,10 +1,14 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useUser } from "../context/UserContext";
+import { useUser } from "./UserContext";
 import { CardBody, Typography, Input, Button } from "@material-tailwind/react";
 import { motion } from "framer-motion";
-import { ArrowRightIcon, LockClosedIcon, TagIcon } from "@heroicons/react/24/outline";
+import {
+  ArrowRightIcon,
+  LockClosedIcon,
+  TagIcon,
+} from "@heroicons/react/24/outline";
 
 export default function SignInForm({ closeModal }) {
   const router = useRouter();
@@ -30,7 +34,7 @@ export default function SignInForm({ closeModal }) {
     const checkIfMobile = () => {
       setIsMobile(window.innerWidth <= 768);
     };
-    
+
     const handleResize = () => {
       checkIfMobile();
       // Detect keyboard visibility by comparing window heights
@@ -39,8 +43,8 @@ export default function SignInForm({ closeModal }) {
     };
 
     checkIfMobile();
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   // Auto-focus username field when component mounts
@@ -57,9 +61,9 @@ export default function SignInForm({ closeModal }) {
       setTimeout(() => {
         if (formContainerRef.current && e.target) {
           e.target.scrollIntoView({
-            behavior: 'smooth',
-            block: 'center',
-            inline: 'nearest'
+            behavior: "smooth",
+            block: "center",
+            inline: "nearest",
           });
         }
       }, 300);
@@ -69,16 +73,16 @@ export default function SignInForm({ closeModal }) {
       setKeyboardVisible(false);
     };
 
-    const inputs = formRef.current?.querySelectorAll('input') || [];
-    inputs.forEach(input => {
-      input.addEventListener('focus', handleFocus);
-      input.addEventListener('blur', handleBlur);
+    const inputs = formRef.current?.querySelectorAll("input") || [];
+    inputs.forEach((input) => {
+      input.addEventListener("focus", handleFocus);
+      input.addEventListener("blur", handleBlur);
     });
 
     return () => {
-      inputs.forEach(input => {
-        input.removeEventListener('focus', handleFocus);
-        input.removeEventListener('blur', handleBlur);
+      inputs.forEach((input) => {
+        input.removeEventListener("focus", handleFocus);
+        input.removeEventListener("blur", handleBlur);
       });
     };
   }, [isMobile]);
@@ -128,7 +132,7 @@ export default function SignInForm({ closeModal }) {
         const userData = {
           username: data.username,
           token: data.token,
-          isAuthenticated: true
+          isAuthenticated: true,
         };
 
         localStorage.setItem("token", data.token);
@@ -156,51 +160,49 @@ export default function SignInForm({ closeModal }) {
       transition={{ duration: 0.8 }}
       className="text-white"
     >
-      <div 
+      <div
         ref={formContainerRef}
-        className={`max-h-[${keyboardVisible ? '70vh' : '90vh'}] overflow-y-auto pb-4`}
+        className={`max-h-[${
+          keyboardVisible ? "70vh" : "90vh"
+        }] overflow-y-auto pb-4`}
         style={{
-          maxHeight: keyboardVisible ? '70vh' : '90vh',
-          paddingBottom: keyboardVisible ? '2rem' : '1rem'
+          maxHeight: keyboardVisible ? "70vh" : "90vh",
+          paddingBottom: keyboardVisible ? "2rem" : "1rem",
         }}
       >
         <CardBody className="space-y-6 px-4">
-          <Typography 
-            variant="h1" 
+          <Typography
+            variant="h1"
             className="uppercase text-center font-extrabold mb-4 text-xl"
           >
             Sign In
           </Typography>
 
-          <form 
-            ref={formRef}
-            onSubmit={handleSubmit} 
-            className="space-y-4"
-          >
-            <InputWithIcon 
-              label="Username" 
-              name="username" 
-              value={formData.username} 
+          <form ref={formRef} onSubmit={handleSubmit} className="space-y-4">
+            <InputWithIcon
+              label="Username"
+              name="username"
+              value={formData.username}
               onChange={handleChange}
-              onFocus={() => handleFieldFocus('username')}
+              onFocus={() => handleFieldFocus("username")}
               onBlur={handleFieldBlur}
-              isActive={activeField === 'username'}
+              isActive={activeField === "username"}
               inputRef={usernameRef}
-              Icon={TagIcon} 
+              Icon={TagIcon}
             />
-            
-            <InputWithIcon 
-              label="Password" 
-              name="password" 
-              type="password" 
-              value={formData.password} 
+
+            <InputWithIcon
+              label="Password"
+              name="password"
+              type="password"
+              value={formData.password}
               onChange={handleChange}
-              onFocus={() => handleFieldFocus('password')}
+              onFocus={() => handleFieldFocus("password")}
               onBlur={handleFieldBlur}
-              isActive={activeField === 'password'}
+              isActive={activeField === "password"}
               inputRef={passwordRef}
-              Icon={LockClosedIcon} 
-              color="yellow" 
+              Icon={LockClosedIcon}
+              color="yellow"
             />
 
             {error && (
@@ -212,7 +214,7 @@ export default function SignInForm({ closeModal }) {
             )}
 
             {isMobile && activeField && (
-              <button 
+              <button
                 type="button"
                 onClick={() => document.activeElement?.blur()}
                 className="text-sm text-yellow-400 text-center w-full mt-2"
@@ -221,7 +223,11 @@ export default function SignInForm({ closeModal }) {
               </button>
             )}
 
-            <div className={`sticky bottom-0 pt-3 -mx-4 px-4 ${keyboardVisible ? 'pb-4' : ''}`}>
+            <div
+              className={`sticky bottom-0 pt-3 -mx-4 px-4 ${
+                keyboardVisible ? "pb-4" : ""
+              }`}
+            >
               <Button
                 type="submit"
                 color="yellow"
@@ -230,7 +236,8 @@ export default function SignInForm({ closeModal }) {
                 className="font-bold flex items-center justify-center gap-2 transition-transform duration-300 bg-gradient-to-br to-green-500 from-yellow-400 shadow-lg"
                 disabled={loading}
               >
-                {loading ? "Signing In..." : "Sign In"} <ArrowRightIcon className="w-5 h-5" />
+                {loading ? "Signing In..." : "Sign In"}{" "}
+                <ArrowRightIcon className="w-5 h-5" />
               </Button>
             </div>
           </form>
@@ -240,18 +247,18 @@ export default function SignInForm({ closeModal }) {
   );
 }
 
-function InputWithIcon({ 
-  label, 
-  name, 
-  value, 
-  onChange, 
-  onFocus, 
-  onBlur, 
-  isActive, 
+function InputWithIcon({
+  label,
+  name,
+  value,
+  onChange,
+  onFocus,
+  onBlur,
+  isActive,
   inputRef,
-  Icon, 
-  type = "text", 
-  color = "green" 
+  Icon,
+  type = "text",
+  color = "green",
 }) {
   return (
     <div className="relative">
@@ -262,12 +269,18 @@ function InputWithIcon({
         onChange={onChange}
         type={type}
         color={color}
-        className={`bg-white text-black transition-all duration-200 ${isActive ? 'ring-2 ring-yellow-400' : ''}`}
+        className={`bg-white text-black transition-all duration-200 ${
+          isActive ? "ring-2 ring-yellow-400" : ""
+        }`}
         onFocus={onFocus}
         onBlur={onBlur}
         ref={inputRef}
       />
-      <Icon className={`w-5 h-5 absolute top-3 right-3 transition-colors duration-200 ${isActive ? 'text-yellow-600' : 'text-green-800'}`} />
+      <Icon
+        className={`w-5 h-5 absolute top-3 right-3 transition-colors duration-200 ${
+          isActive ? "text-yellow-600" : "text-green-800"
+        }`}
+      />
     </div>
   );
 }

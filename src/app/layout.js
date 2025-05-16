@@ -1,5 +1,5 @@
-import { UserProvider } from "./context/UserContext";
-import { ThemeProvider } from "./context/ThemeContext";
+import { UserProvider } from "./components/UserContext";
+import { ThemeProvider } from "./components/ThemeContext";
 import "./globals.css";
 import Navbar from "./components/Navbar";
 
