@@ -133,6 +133,8 @@ export default function SignInForm({ closeModal }) {
           username: data.username,
           token: data.token,
           isAuthenticated: true,
+          first_name: data.first_name,
+          last_name: data.last_name
         };
 
         localStorage.setItem("token", data.token);

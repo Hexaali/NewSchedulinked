@@ -11,8 +11,8 @@ export default function ProfileCard({ user }) {
   if (!user) return null;
 
   const imageSrc =
-    user.image && user.image.trim() !== ""
-      ? user.image
+    user.profile_picture && user.profile_picture.trim() !== ""
+      ? user.profile_picture
       : "/default-profile.png";
 
   const handleCardClick = () => {

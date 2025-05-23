@@ -16,14 +16,15 @@ import ProfilePageWrapper from "./components/ProfilePageWrapper";
 export default function ClientSideRouter() {
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/login" element={<SignInForm />} />
-        <Route path="/signup" element={<SignupForm />} />
-        <Route path="/feed" element={<Feed />} />
-        <Route path="/" element={<ProfilePageWrapper />} />
-        <Route path="/:username" element={<ProfilePageWrapper />} />
-        <Route path="*" element={<Navigate to="/" />} />
-      </Routes>
-    </BrowserRouter>
+  <Routes>
+    <Route path="/login" element={<SignInForm />} />
+    <Route path="/signup" element={<SignupForm />} />
+    <Route path="/feed" element={<Feed />} />
+    <Route path="/" element={<ProfilePageWrapper />} />
+    <Route path="/:username" element={<ProfilePageWrapper />} />
+    <Route path="*" element={<Navigate to="/" />} />
+  </Routes>
+</BrowserRouter>
+
   );
 }

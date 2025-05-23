@@ -6,7 +6,9 @@ import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 
 // Lazy load heading to avoid hydration mismatch
-const HeadingHomepage = dynamic(() => import("./HeadingHomepage"), { ssr: false });
+const HeadingHomepage = dynamic(() => import("./HeadingHomepage"), {
+  ssr: false,
+});
 import SignupForm from "./SignUpForm";
 import ModalButtonForm from "./ModalButtonForm";
 
@@ -33,9 +35,9 @@ export default function LandingPage() {
   if (!isClient) return null;
 
   return (
-    <section className="relative flex items-center justify-center p-8 md:p-20 min-h-screen overflow-hidden bg-black">
+    <section className="relative flex items-center justify-center p-8 md:p-20 min-h-screen overflow-hidden bg-gradient-to-br from-yellow-600 to-green-500 dark:from-gray-900 dark:via-gray-800 dark:to-yellow-600">
       {/* Background Video */}
-      <video
+      {/* <video
         className="absolute top-0 left-0 w-full h-full object-cover z-0"
         autoPlay
         loop
@@ -43,7 +45,7 @@ export default function LandingPage() {
         playsInline
       >
         <source src="/landing.mp4" type="video/mp4" />
-      </video>
+      </video> */}
 
       {/* Overlay */}
       <div className="absolute top-0 left-0 w-full h-full bg-black/60 z-10" />
@@ -51,19 +53,20 @@ export default function LandingPage() {
       {/* Foreground Content */}
       <div className="flex flex-col items-center justify-center relative z-20 w-full md:w-1/2 text-center md:text-left px-4 pt-20">
         <HeadingHomepage />
-
-        <Typography variant="paragraph" className="text-gray-300 mb-8 xl:text-sm">
-          Artists post events. Fans sync them to their calendars. Apple or Google just one tap.
-        </Typography>
-
-        {!isLoggedIn && (
-          <Button
-            onClick={toggleModal}
-            className="bg-gradient-to-tr from-yellow-400 to-green-500 text-black"
-          >
-            Register as an Artist
+        
+        <div className="flex flex-row space-x-2 mt-6">
+          {!isLoggedIn && (
+            <Button
+              onClick={toggleModal}
+              className="bg-gradient-to-tr from-yellow-400 to-green-500 text-black"
+            >
+              Register as an Artist
+            </Button>
+          )}
+          <Button className="bg-gradient-to-tr to-green-500 from-yellow-400  text-black">
+            Register as an Business
           </Button>
-        )}
+        </div>
       </div>
 
       {/* Modal */}

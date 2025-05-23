@@ -114,8 +114,8 @@ export default function Navbar() {
       <nav className="blurred fixed z-30 w-full p-4 px-4 sm:px-8 md:px-16 bg-white dark:bg-gray-900 shadow-md flex flex-wrap items-center justify-between">
         <div className="flex items-center">
           <Image
-            src="/image(1).png"
-            alt="Logo"
+            src="/SchedulinkedLogo.png"
+            alt="Schedulinked Logo"
             width={120}
             height={80}
             className="w-28 sm:w-36 md:w-44 h-auto"

@@ -10,13 +10,10 @@ import {
 } from "@heroicons/react/24/outline";
 import { Typography, Spinner } from "@material-tailwind/react";
 
-// ✅ Reusable component for displaying icon + text
-const InfoRow = ({ icon: Icon, text, className = "" }) => (
-  <div className={`flex items-center gap-2 text-sm lg:text-base ${className}`}>
-    <Icon className="h-4 w-4 lg:h-5 lg:w-5 text-green-700" />
-    <span>{text}</span>
-  </div>
-);
+function capitalize(word) {
+  if (!word) return "";
+  return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+}
 
 export const EventCard = React.memo(function EventCard({ event }) {
   const [user, setUser] = useState(() => {
@@ -28,7 +25,6 @@ export const EventCard = React.memo(function EventCard({ event }) {
   });
 
   useEffect(() => {
-    // Log only once after parsing
     if (user) console.log("User Data", user);
   }, [user]);
 
@@ -40,91 +36,112 @@ export const EventCard = React.memo(function EventCard({ event }) {
     );
   }
 
-  const eventImage = event.image ?? "/default-event.jpg";
-  const profileImage = user.image ?? "/default-profile.png";
-  const username = user.username ?? "Unknown User";
+  // const eventImage = event.image ?? "/default-event.jpg";
+  const fullName = `${capitalize(user?.first_name)} ${capitalize(user?.last_name)}`.trim();
+  const profileImage = user.profile_picture ?? "/default-profile.png";
+  const username = user.username ?? "Invalid-Username";
+
+  const eventDateTime = event.time ? new Date(event.time) : null;
+
+  const dateString = eventDateTime
+    ? eventDateTime.toLocaleDateString(undefined, { dateStyle: "medium" })
+    : "";
+  const timeString = eventDateTime
+    ? eventDateTime.toLocaleTimeString(undefined, {
+        hour: "2-digit",
+        minute: "2-digit",
+      })
+    : "";
 
   return (
-    <div className="w-full max-w-2xl lg:max-w-4xl mx-auto bg-white rounded-2xl shadow-md overflow-hidden border m-2 bg-gradient-to-tr from-yellow-400 to-green-500">
-      {/* Header */}
-      <div className="flex items-center justify-between px-4 py-3 bg-gray-50 bg-gradient-to-tr from-yellow-400 to-green-500">
-        <div className="flex items-center gap-3">
-          <div className="relative w-12 h-12 sm:w-14 sm:h-14 rounded-full overflow-hidden border-2 border-green-400 shadow-md">
-            <Image
-              src={profileImage}
-              alt={username}
-              fill
-              className="object-cover"
-              sizes="(max-width: 768px) 48px, 56px"
-            />
-          </div>
-          <span className="font-semibold text-gray-800 dark:text-white">{username}</span>
+    <div className="w-full max-w-2xl lg:max-w-3xl mx-auto bg-white rounded-xl border shadow-sm hover:shadow-md transition m-2 px-4 py-3">
+      {/* Header: profile pic + username + full name */}
+      <div className="flex items-center gap-3 mb-3">
+        <div className="relative w-12 h-12 rounded-full overflow-hidden border border-gray-300">
+          <Image
+            src={profileImage}
+            alt={username}
+            fill
+            className="object-cover"
+            sizes="48px"
+          />
+        </div>
+        <div className="flex flex-col leading-tight">
+          <span className="font-semibold text-gray-900">{fullName}</span>
+          <span className="text-sm text-gray-500">@{username}</span>
         </div>
       </div>
 
-      {/* Event Image */}
-      <div className="w-full aspect-video relative">
-        <Image
-          src={eventImage}
-          alt={event.title ?? "Event Image"}
-          fill
-          className="object-fill"
-          sizes="(max-width: 768px) 100vw, (max-width: 1024px) 800px, 1200px"
-        />
-      </div>
-
-      {/* Event Details */}
-      <div className="px-6 py-1 lg:space-y-2">
+      {/* Event Title and Description */}
+      <div className="mb-4 space-y-2">
         {event.title && (
-          <Typography variant="h6" className="text-lg lg:text-xl text-green-300 font-bold">
+          <Typography variant="h6" className="text-lg font-bold text-gray-800">
             {event.title}
           </Typography>
         )}
 
         {event.description && (
-          <Typography className="text-sm lg:text-base text-gray-600">{event.description}</Typography>
-        )}
-
-        {event.datetime && (
-          <InfoRow
-            icon={CalendarDaysIcon}
-            text={new Date(event.datetime).toLocaleString()}
-            className="text-green-300"
-          />
-        )}
-
-        {event.duration && (
-          <InfoRow icon={ClockIcon} text={event.duration} className="text-green-300" />
-        )}
-
-        {event.location && (
-          <div className="text-sm lg:text-base text-blue-600 font-medium">
-            📍 {event.location}
-          </div>
-        )}
-
-        {event.category && (
-          <div className="text-xs lg:text-sm inline-block px-3 py-1 bg-green-100 text-green-800 rounded-full mt-1">
-            {event.category}
-          </div>
-        )}
-
-        {event.link && (
-          <a
-            href={event.link}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-1 text-blue-600 hover:underline text-sm lg:text-base"
-          >
-            <LinkIcon className="h-4 w-4 lg:h-5 lg:w-5" />
-            Visit Link
-          </a>
-        )}
-
-        {event.attachment?.name && (
-          <InfoRow icon={PaperClipIcon} text={event.attachment.name} className="text-gray-600" />
+          <Typography className="text-sm text-gray-700">{event.description}</Typography>
         )}
       </div>
+
+      {/* Bottom info line with date, time, location, duration, category */}
+      <div className="flex flex-wrap items-center gap-6 text-sm text-gray-600">
+        {/* Date */}
+        {eventDateTime && (
+          <div className="flex items-center gap-1">
+            <CalendarDaysIcon className="w-4 h-4 text-green-600" />
+            <span>{dateString}</span>
+          </div>
+        )}
+
+        {/* Time */}
+        {eventDateTime && (
+          <div className="flex items-center gap-1">
+            <ClockIcon className="w-4 h-4 text-green-600" />
+            <span>{timeString}</span>
+          </div>
+        )}
+
+        {/* Location */}
+        {event.location && (
+          <div className="flex items-center gap-1">
+            <span>📍</span>
+            <span>{event.location}</span>
+          </div>
+        )}
+
+        {/* Spacer to push category right */}
+        <div className="flex-grow"></div>
+
+        {/* Event Category */}
+        {event.category && (
+          <span className="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs whitespace-nowrap">
+            {event.category}
+          </span>
+        )}
+      </div>
+
+      {/* Event Link */}
+      {event.link && (
+        <a
+          href={event.link}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center gap-1 text-blue-600 hover:underline text-sm mt-3"
+        >
+          <LinkIcon className="h-4 w-4" />
+          Visit Link
+        </a>
+      )}
+
+      {/* Attachment */}
+      {event.attachment?.name && (
+        <div className="flex items-center gap-2 text-gray-600 text-sm mt-1">
+          <PaperClipIcon className="w-4 h-4" />
+          {event.attachment.name}
+        </div>
+      )}
     </div>
   );
 });
