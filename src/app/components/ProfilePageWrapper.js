@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import ProfileContent from "./ProfileContent";
 import LandingPage from "./LandingPage";
 import NotFound from "./NotFound";
+import { Spinner } from "@material-tailwind/react";
 
 export default function ProfilePageWrapper() {
   const { username } = useParams();
@@ -44,7 +45,7 @@ export default function ProfilePageWrapper() {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <p>Loading...</p>
+        <Spinner className="h-12 w-12" color="amber" />
       </div>
     );
   }

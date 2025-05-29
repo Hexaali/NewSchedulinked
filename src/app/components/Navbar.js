@@ -1,16 +1,18 @@
 "use client";
+
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import { useRouter, usePathname } from "next/navigation";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Button, Alert } from "@material-tailwind/react";
 import LightDarkButton from "./LightDarkButton";
 import ModalButtonForm from "./ModalButtonForm";
 import SignInForm from "./SIgnInForm";
 
 export default function Navbar() {
-  const router = useRouter();
-  const pathname = usePathname();
-  const [darkMode, setDarkMode] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const pathname = location.pathname;
+
   const [openSignUp, setOpenSignUp] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [hasUserQuery, setHasUserQuery] = useState(false);
@@ -22,32 +24,14 @@ export default function Navbar() {
   });
 
   useEffect(() => {
-    const savedTheme = localStorage.getItem("theme");
-    if (savedTheme === "dark") {
-      document.documentElement.classList.add("dark");
-      setDarkMode(true);
-    }
-
     const loggedIn = localStorage.getItem("isLoggedIn") === "true";
     setIsLoggedIn(loggedIn);
 
-    // Safely access window and URLSearchParams on the client
     if (typeof window !== "undefined") {
       const searchParams = new URLSearchParams(window.location.search);
       setHasUserQuery(searchParams.has("u"));
     }
   }, []);
-
-  const toggleTheme = () => {
-    if (darkMode) {
-      document.documentElement.classList.remove("dark");
-      localStorage.setItem("theme", "light");
-    } else {
-      document.documentElement.classList.add("dark");
-      localStorage.setItem("theme", "dark");
-    }
-    setDarkMode(!darkMode);
-  };
 
   const handleSignUpOpen = () => {
     setOpenSignUp(!openSignUp);
@@ -64,7 +48,7 @@ export default function Navbar() {
     localStorage.removeItem("user");
     setIsLoggedIn(false);
     showAlert("You have been logged out.", "green");
-     window.location.href = "/";
+    navigate("/");  // Use React Router navigate instead of window.location.href
   };
 
   const handleLogin = () => {
@@ -111,7 +95,7 @@ export default function Navbar() {
       )}
 
       {/* Navbar */}
-      <nav className="blurred fixed z-30 w-full p-4 px-4 sm:px-8 md:px-16 bg-white dark:bg-gray-900 shadow-md flex flex-wrap items-center justify-between">
+      <nav className="blurred fixed z-30 w-full p-4 px-4 sm:px-8 md:px-16 bg-white dark:bg-gray-900 shadow-md flex flex-wrap items-center justify-between backdrop-blur-md">
         <div className="flex items-center">
           <Image
             src="/SchedulinkedLogo.png"
@@ -123,7 +107,6 @@ export default function Navbar() {
         </div>
 
         <div className="flex items-center justify-end gap-4 sm:gap-6 md:gap-10 ml-auto">
-          {/* Conditional rendering moved out of JSX scope */}
           {!(
             pathname === "/" && hasUserQuery
           ) && (

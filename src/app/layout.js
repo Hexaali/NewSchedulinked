@@ -1,7 +1,7 @@
 import { UserProvider } from "./components/UserContext";
 import { ThemeProvider } from "./components/ThemeContext";
 import "./globals.css";
-import Navbar from "./components/Navbar";
+
 
 export const metadata = {
   title: "Schedulinked",
@@ -20,7 +20,7 @@ export default function RootLayout({ children }) {
       <body>
         <UserProvider>
           <ThemeProvider>
-            <Navbar />
+           
             {children}
           </ThemeProvider>
         </UserProvider>

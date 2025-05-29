@@ -10,12 +10,13 @@ import SignInForm from "./components/SIgnInForm";
 import SignupForm from "./components/SignUpForm";
 import Feed from "./components/Feed";
 import ProfilePageWrapper from "./components/ProfilePageWrapper";
-
+import Navbar from "./components/Navbar";
 
 
 export default function ClientSideRouter() {
   return (
     <BrowserRouter>
+     <Navbar />
   <Routes>
     <Route path="/login" element={<SignInForm />} />
     <Route path="/signup" element={<SignupForm />} />

@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import EventFeed from "./EventFeed";
 import AddEventButton from "./AddEventButton";
 // import ProfileCard from "./ProfileCard";
+import { API_BASE_URL } from "@/constants";
 
 export default function Feed() {
   const router = useRouter();
@@ -18,7 +19,7 @@ export default function Feed() {
       const token = localStorage.getItem("token");
       if (!token) throw new Error("Token not found. Please log in again.");
 
-      const res = await fetch("https://schedulinked.kayman.biz/api/v1/event", {
+      const res = await fetch(`${API_BASE_URL}/api/v1/event`, {
         headers: { Authorization: `Token ${token}` },
       });
 
@@ -65,18 +66,21 @@ export default function Feed() {
     >
       {/* Event Feed Section (Scrollable) */}
       <div className="w-full lg:w-3/5 lg:pt-6 p-6 overflow-y-auto flex flex-col items-center mt-2 relative z-10">
-        <EventFeed events={events} loading={loading} error={error} />
+        {/* ✅ Pass user to EventFeed */}
+        <EventFeed events={events} loading={loading} error={error} user={user} />
       </div>
 
-      {/* Profile Card Section (UNCHANGED on mobile, adjusted for desktop)
-  {user && (
-  <div className="fixed top-20 left-0 right-0 z-20 flex justify-center items-start pt-3
-                  xl:pr-16 lg:top-1/2 lg:left-auto lg:right-10 lg:transform lg:-translate-y-1/2 lg:justify-end">
-    <ProfileCard user={user} />
-  </div>
-)} */}
+      {/* Optional ProfileCard UI */}
+      {/* 
+      {user && (
+        <div className="fixed top-20 left-0 right-0 z-20 flex justify-center items-start pt-3
+                        xl:pr-16 lg:top-1/2 lg:left-auto lg:right-10 lg:transform lg:-translate-y-1/2 lg:justify-end">
+          <ProfileCard user={user} />
+        </div>
+      )} 
+      */}
 
-      {/* Add Event Button (unchanged) */}
+      {/* Add Event Button */}
       <div className="fixed bottom-6 right-6 z-50">
         <AddEventButton onNewEvent={handleNewEvent} />
       </div>

@@ -1,7 +1,4 @@
-"use client";
-
 import { useState, useEffect } from "react";
-import Image from "next/image";
 import {
   Button,
   Typography,
@@ -11,6 +8,13 @@ import {
   DialogFooter,
   Input,
 } from "@material-tailwind/react";
+import {
+  GOOGLE_CLIENT_ID,
+  GOOGLE_REDIRECT_URI,
+  GOOGLE_SCOPES,
+  API_BASE_URL,
+} from "@/constants";
+import Image from "next/image";
 
 function capitalize(word) {
   if (!word) return "";
@@ -42,19 +46,16 @@ export default function ProfileContent({ userData }) {
           const cleanUrl = window.location.origin + window.location.pathname;
           window.history.replaceState({}, document.title, cleanUrl);
 
-          const res = await fetch(
-            "https://schedulinked.kayman.biz/api/v1/follow",
-            {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                artist: payload.user_id,
-                first_name: payload.first_name,
-                last_name: payload.last_name,
-                google_code: code,
-              }),
-            }
-          );
+          const res = await fetch(`${API_BASE_URL}/api/v1/follow`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              artist: payload.user_id,
+              first_name: payload.first_name,
+              last_name: payload.last_name,
+              google_code: code,
+            }),
+          });
 
           const result = await res.json();
           console.log("Google follow result:", result);
@@ -68,11 +69,6 @@ export default function ProfileContent({ userData }) {
   }, []);
 
   const getGoogleCalendarToken = () => {
-    const CLIENT_ID =
-      "210346042271-uqajb4u40cpid10in6i7lr59h7u1ln67.apps.googleusercontent.com";
-    const REDIRECT_URI = "https://schedulinked.kayman.biz";
-    const SCOPES = "https://www.googleapis.com/auth/calendar";
-
     const payload = {
       user_id: userData?.id,
       first_name: formData.first_name,
@@ -82,10 +78,10 @@ export default function ProfileContent({ userData }) {
     const encodedState = btoa(JSON.stringify(payload));
 
     const params = new URLSearchParams({
-      client_id: CLIENT_ID,
-      redirect_uri: REDIRECT_URI,
+      client_id: GOOGLE_CLIENT_ID,
+      redirect_uri: GOOGLE_REDIRECT_URI,
       response_type: "code",
-      scope: SCOPES,
+      scope: GOOGLE_SCOPES,
       include_granted_scopes: "true",
       access_type: "offline",
       prompt: "consent",
@@ -98,7 +94,7 @@ export default function ProfileContent({ userData }) {
   const handleAppleCalendarSubmit = () => {
     if (formData.email && formData.password) {
       const appleHash = btoa(formData.email + ":" + formData.password);
-      fetch("https://schedulinked.kayman.biz/api/v1/follow", {
+      fetch(`${API_BASE_URL}/api/v1/follow`, {
         method: "POST",
         body: JSON.stringify({
           apple_hash: appleHash,
@@ -147,17 +143,10 @@ export default function ProfileContent({ userData }) {
             />
           </div>
           <div className="flex flex-col leading-tight">
-            <Typography
-            variant="h4"
-              className="text-white"
-            >
-              {`${capitalize(userData?.first_name)} ${capitalize(
-                userData?.last_name
-              )}`.trim() || "No Name"}
+            <Typography variant="h4" className="text-white">
+              {`${capitalize(userData?.first_name)} ${capitalize(userData?.last_name)}`.trim() || "No Name"}
             </Typography>
-            <Typography
-              className="text-sm text-white mt-2"
-            >
+            <Typography className="text-sm text-white mt-2">
               @{userData?.username || "No User"}
             </Typography>
           </div>
@@ -168,7 +157,7 @@ export default function ProfileContent({ userData }) {
             onClick={() => setOpenGoogleModal(true)}
             className="flex items-center justify-center gap-2 bg-gradient-to-r from-green-500 to-yellow-400 text-white py-3 rounded-full shadow-md hover:opacity-90 transition"
           >
-            <Image src="/google.png" alt="Google" width={20} height={20} />
+            <Image src="/google.png" alt="Apple" width={20} height={20} />
             Add to Google Calendar
           </Button>
 
@@ -195,30 +184,19 @@ export default function ProfileContent({ userData }) {
           <Input
             label="First Name"
             value={formData.first_name}
-            onChange={(e) =>
-              setFormData({ ...formData, first_name: e.target.value })
-            }
+            onChange={(e) => setFormData({ ...formData, first_name: e.target.value })}
           />
           <Input
             label="Last Name"
             value={formData.last_name}
-            onChange={(e) =>
-              setFormData({ ...formData, last_name: e.target.value })
-            }
+            onChange={(e) => setFormData({ ...formData, last_name: e.target.value })}
           />
         </DialogBody>
         <DialogFooter className="gap-2">
-          <Button
-            variant="text"
-            color="gray"
-            onClick={() => setOpenGoogleModal(false)}
-          >
+          <Button variant="text" color="gray" onClick={() => setOpenGoogleModal(false)}>
             Cancel
           </Button>
-          <Button
-            className="bg-green-600 text-white"
-            onClick={handleGoogleCalendarSubmit}
-          >
+          <Button className="bg-green-600 text-white" onClick={handleGoogleCalendarSubmit}>
             Submit
           </Button>
         </DialogFooter>
@@ -237,46 +215,42 @@ export default function ProfileContent({ userData }) {
           <Input
             label="First Name"
             value={formData.first_name}
-            onChange={(e) =>
-              setFormData({ ...formData, first_name: e.target.value })
-            }
+            onChange={(e) => setFormData({ ...formData, first_name: e.target.value })}
           />
           <Input
             label="Last Name"
             value={formData.last_name}
-            onChange={(e) =>
-              setFormData({ ...formData, last_name: e.target.value })
-            }
+            onChange={(e) => setFormData({ ...formData, last_name: e.target.value })}
           />
           <Input
-            label="Email / Apple ID"
+            label="Apple ID"
             type="email"
             value={formData.email}
-            onChange={(e) =>
-              setFormData({ ...formData, email: e.target.value })
-            }
+            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
           />
           <Input
             label="App Password"
             type="password"
             value={formData.password}
-            onChange={(e) =>
-              setFormData({ ...formData, password: e.target.value })
-            }
+            onChange={(e) => setFormData({ ...formData, password: e.target.value })}
           />
+          <Typography variant="paragraph" className="text-sm text-blue-600 dark:text-blue-400 mt-1">
+            Don&apos;t have an app password?{" "}
+            <a
+              href="https://support.apple.com/en-us/102654"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline hover:text-blue-800 dark:hover:text-blue-300"
+            >
+              Follow this link for App-Specific password.
+            </a>
+          </Typography>
         </DialogBody>
         <DialogFooter className="gap-2">
-          <Button
-            variant="text"
-            color="gray"
-            onClick={() => setOpenAppleModal(false)}
-          >
+          <Button variant="text" color="gray" onClick={() => setOpenAppleModal(false)}>
             Cancel
           </Button>
-          <Button
-            className="bg-blue-600 text-white"
-            onClick={handleAppleCalendarSubmit}
-          >
+          <Button className="bg-blue-600 text-white" onClick={handleAppleCalendarSubmit}>
             Submit
           </Button>
         </DialogFooter>

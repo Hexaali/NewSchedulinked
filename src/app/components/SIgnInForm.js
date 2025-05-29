@@ -9,6 +9,7 @@ import {
   LockClosedIcon,
   TagIcon,
 } from "@heroicons/react/24/outline";
+import { API_BASE_URL } from "@/constants";
 
 export default function SignInForm({ closeModal }) {
   const router = useRouter();
@@ -118,7 +119,7 @@ export default function SignInForm({ closeModal }) {
     setError("");
 
     try {
-      const res = await fetch("https://schedulinked.kayman.biz/api/v1/login", {
+      const res = await fetch(`${API_BASE_URL}/api/v1/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -130,19 +131,21 @@ export default function SignInForm({ closeModal }) {
 
       if (res.ok && data.token) {
         const userData = {
-          username: data.username,
           token: data.token,
+          username: data.username,
+          full_name: data.full_name,
+          followers: data.followers || [],
           isAuthenticated: true,
-          first_name: data.first_name,
-          last_name: data.last_name
         };
 
         localStorage.setItem("token", data.token);
         localStorage.setItem("user", JSON.stringify(userData));
+
         updateUser(userData);
         if (closeModal) closeModal();
         router.push("/feed");
-      } else {
+      } 
+      else {
         setError(data.message || "Invalid username or password");
         usernameRef.current?.focus();
       }

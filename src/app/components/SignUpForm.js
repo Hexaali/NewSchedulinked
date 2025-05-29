@@ -10,9 +10,11 @@ import {
   ArrowRightIcon,
   LockClosedIcon,
   PhotoIcon,
+  BuildingOfficeIcon,
 } from "@heroicons/react/24/outline";
+import { API_BASE_URL } from "@/constants";
 
-export default function SignupForm({ closeModal }) {
+export default function SignupForm({ closeModal, type = "artist" }) {
   const [formData, setFormData] = useState({
     firstname: "",
     lastname: "",
@@ -26,15 +28,14 @@ export default function SignupForm({ closeModal }) {
   const [error, setError] = useState("");
   const [activeField, setActiveField] = useState(null);
 
-  const firstNameRef = useRef(null);
-  const lastNameRef = useRef(null);
+  const nameRef = useRef(null);
   const emailRef = useRef(null);
   const usernameRef = useRef(null);
   const passwordRef = useRef(null);
   const imageRef = useRef(null);
 
   useEffect(() => {
-    firstNameRef.current?.focus();
+    nameRef.current?.focus();
   }, []);
 
   const handleChange = (e) => {
@@ -50,17 +51,12 @@ export default function SignupForm({ closeModal }) {
     }
   };
 
-  const handleFieldFocus = (fieldName) => {
-    setActiveField(fieldName);
-  };
-
-  const handleFieldBlur = () => {
-    setActiveField(null);
-  };
+  const handleFieldFocus = (fieldName) => setActiveField(fieldName);
+  const handleFieldBlur = () => setActiveField(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { email, username, password, firstname, lastname, image } = formData;
+    const { email, username, password, firstname, image } = formData;
 
     if (!email) {
       setError("Email is required");
@@ -78,18 +74,25 @@ export default function SignupForm({ closeModal }) {
       return;
     }
 
+    // Parse name
+    let firstName = "", lastName = "";
+    const nameParts = firstname.trim().split(/\s+/);
+    firstName = nameParts[0] || "";
+    lastName = nameParts.slice(1).join(" ") || "_";
+
     const form = new FormData();
     form.append("username", username);
     form.append("email", email);
     form.append("password", password);
-    if (firstname) form.append("first_name", firstname);
-    if (lastname) form.append("last_name", lastname);
+    form.append("first_name", firstName);
+    form.append("last_name", lastName);
+    form.append("type", type.toUpperCase()); 
     if (image) form.append("profile_picture", image);
 
     try {
       setLoading(true);
       setError("");
-      const res = await fetch("https://schedulinked.kayman.biz/api/v1/register", {
+      const res = await fetch(`${API_BASE_URL}/api/v1/register`, {
         method: "POST",
         body: form,
       });
@@ -98,7 +101,7 @@ export default function SignupForm({ closeModal }) {
       let data;
       try {
         data = JSON.parse(responseText);
-      } catch (error) {
+      } catch {
         setError("Server response is not valid JSON. Please try again.");
         return;
       }
@@ -110,7 +113,7 @@ export default function SignupForm({ closeModal }) {
         } else if (data.message?.toLowerCase().includes("username")) {
           usernameRef.current?.focus();
         } else {
-          firstNameRef.current?.focus();
+          nameRef.current?.focus();
         }
         return;
       }
@@ -119,27 +122,23 @@ export default function SignupForm({ closeModal }) {
       if (closeModal) closeModal();
     } catch (err) {
       setError("Something went wrong. Please try again.");
-      firstNameRef.current?.focus();
+      nameRef.current?.focus();
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <motion.div 
-      initial={{ opacity: 0, y: 50 }} 
-      animate={{ opacity: 1, y: 0 }} 
-      transition={{ duration: 0.8 }} 
+    <motion.div
+      initial={{ opacity: 0, y: 50 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.8 }}
       className="text-white flex flex-col max-h-[90vh]"
     >
-      {/* Scrollable area */}
       <div className="flex-1 overflow-y-auto scroll-pb-36 px-2 sm:px-8">
         <CardBody className="space-y-6 pb-6">
-          <Typography 
-            variant="h2" 
-            className="uppercase text-center font-extrabold pt-4 pb-2 text-xl"
-          >
-            Join as an Artist
+          <Typography variant="h2" className="uppercase text-center font-extrabold pt-4 pb-2 text-xl">
+            Join as {type === "artist" ? "an Artist" : "a Business"}
           </Typography>
 
           {error && (
@@ -151,87 +150,77 @@ export default function SignupForm({ closeModal }) {
           )}
 
           <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="flex flex-col sm:flex-row gap-4">
-              <InputWithIcon 
-                label="First Name" 
-                name="firstname" 
-                value={formData.firstname} 
-                onChange={handleChange}
-                onFocus={() => handleFieldFocus('firstname')}
-                onBlur={handleFieldBlur}
-                isActive={activeField === 'firstname'}
-                inputRef={firstNameRef}
-                Icon={UserCircleIcon} 
-              />
-              <InputWithIcon 
-                label="Last Name" 
-                name="lastname" 
-                value={formData.lastname} 
-                onChange={handleChange}
-                onFocus={() => handleFieldFocus('lastname')}
-                onBlur={handleFieldBlur}
-                isActive={activeField === 'lastname'}
-                inputRef={lastNameRef}
-                Icon={UserCircleIcon} 
-              />
-            </div>
+            <InputWithIcon
+              label={type === "artist" ? "Full Name" : "Business Name"}
+              name="firstname"
+              value={formData.firstname}
+              onChange={handleChange}
+              onFocus={() => handleFieldFocus("firstname")}
+              onBlur={handleFieldBlur}
+              isActive={activeField === "firstname"}
+              inputRef={nameRef}
+              Icon={type === "artist" ? UserCircleIcon : BuildingOfficeIcon}
+              required
+            />
 
-            <InputWithIcon 
-              label="Email Address" 
-              type="email" 
-              name="email" 
-              value={formData.email} 
+            <InputWithIcon
+              label="Email Address"
+              type="email"
+              name="email"
+              value={formData.email}
               onChange={handleChange}
-              onFocus={() => handleFieldFocus('email')}
+              onFocus={() => handleFieldFocus("email")}
               onBlur={handleFieldBlur}
-              isActive={activeField === 'email'}
+              isActive={activeField === "email"}
               inputRef={emailRef}
-              Icon={EnvelopeIcon} 
-              color="yellow" 
+              Icon={EnvelopeIcon}
+              color="yellow"
               required
             />
-            
-            <InputWithIcon 
-              label="Username" 
-              name="username" 
-              value={formData.username} 
+
+            <InputWithIcon
+              label="Username"
+              name="username"
+              value={formData.username}
               onChange={handleChange}
-              onFocus={() => handleFieldFocus('username')}
+              onFocus={() => handleFieldFocus("username")}
               onBlur={handleFieldBlur}
-              isActive={activeField === 'username'}
+              isActive={activeField === "username"}
               inputRef={usernameRef}
-              Icon={TagIcon} 
+              Icon={TagIcon}
               required
             />
-            
-            <InputWithIcon 
-              label="Password" 
-              type="password" 
-              name="password" 
-              value={formData.password} 
+
+            <InputWithIcon
+              label="Password"
+              type="password"
+              name="password"
+              value={formData.password}
               onChange={handleChange}
-              onFocus={() => handleFieldFocus('password')}
+              onFocus={() => handleFieldFocus("password")}
               onBlur={handleFieldBlur}
-              isActive={activeField === 'password'}
+              isActive={activeField === "password"}
               inputRef={passwordRef}
-              Icon={LockClosedIcon} 
-              color="yellow" 
+              Icon={LockClosedIcon}
+              color="yellow"
               required
             />
 
             <div className="relative pb-4">
-              <label className="block text-sm font-medium text-white mb-2">
-                Profile Image (Optional)
-              </label>
-              <div 
-                className={`flex flex-col gap-3 bg-white px-3 py-2 rounded-md shadow-sm transition-all duration-200 ${activeField === 'image' ? 'ring-2 ring-yellow-400' : ''}`}
+              <label className="block text-sm font-medium text-white mb-2">Profile Image (Optional)</label>
+              <div
+                className={`flex flex-col gap-3 bg-white px-3 py-2 rounded-md shadow-sm transition-all duration-200 ${
+                  activeField === "image" ? "ring-2 ring-yellow-400" : ""
+                }`}
                 onClick={() => imageRef.current?.click()}
-                onFocus={() => handleFieldFocus('image')}
+                onFocus={() => handleFieldFocus("image")}
                 onBlur={handleFieldBlur}
                 tabIndex={0}
               >
                 <div className="flex items-center gap-3 cursor-pointer">
-                  <PhotoIcon className={`w-5 h-5 transition-colors duration-200 ${activeField === 'image' ? 'text-yellow-600' : 'text-green-800'}`} />
+                  <PhotoIcon className={`w-5 h-5 transition-colors duration-200 ${
+                    activeField === "image" ? "text-yellow-600" : "text-green-800"
+                  }`} />
                   <span className="text-sm text-gray-700">Choose an image</span>
                   <input
                     type="file"
@@ -260,7 +249,6 @@ export default function SignupForm({ closeModal }) {
         </CardBody>
       </div>
 
-      {/* Sticky footer button */}
       <div className="sticky bottom-0 left-0 right-0 z-10 px-4 sm:px-8 pt-3 pb-4 border-t">
         <Button
           type="submit"
@@ -271,26 +259,27 @@ export default function SignupForm({ closeModal }) {
           onClick={handleSubmit}
           className="font-bold flex items-center justify-center gap-2 transition-transform duration-300 bg-gradient-to-br to-green-500 from-yellow-400 shadow-lg"
         >
-          {loading ? "Signing Up..." : "Sign Up"} <ArrowRightIcon className="w-5 h-5" />
+          {loading ? "Signing Up..." : "Sign Up"}{" "}
+          <ArrowRightIcon className="w-5 h-5" />
         </Button>
       </div>
     </motion.div>
   );
 }
 
-function InputWithIcon({ 
-  label, 
-  name, 
-  value, 
-  onChange, 
-  onFocus, 
-  onBlur, 
-  isActive, 
+function InputWithIcon({
+  label,
+  name,
+  value,
+  onChange,
+  onFocus,
+  onBlur,
+  isActive,
   inputRef,
-  Icon, 
-  type = "text", 
+  Icon,
+  type = "text",
   color = "green",
-  required = false
+  required = false,
 }) {
   return (
     <div className="relative w-full">
@@ -301,13 +290,19 @@ function InputWithIcon({
         onChange={onChange}
         type={type}
         color={color}
-        className={`bg-white text-black transition-all duration-200 ${isActive ? 'ring-2 ring-yellow-400' : ''}`}
+        className={`bg-white text-black transition-all duration-200 ${
+          isActive ? "ring-2 ring-yellow-400" : ""
+        }`}
         onFocus={onFocus}
         onBlur={onBlur}
         ref={inputRef}
         required={required}
       />
-      <Icon className={`w-5 h-5 absolute top-3 right-3 transition-colors duration-200 ${isActive ? 'text-yellow-600' : 'text-green-800'}`} />
+      <Icon
+        className={`w-5 h-5 absolute top-3 right-3 transition-colors duration-200 ${
+          isActive ? "text-yellow-600" : "text-green-800"
+        }`}
+      />
     </div>
   );
 }
