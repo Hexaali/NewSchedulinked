@@ -1,13 +1,6 @@
-"use client";
-
 import React from "react";
 import Image from "next/image";
-import {
-  CalendarDaysIcon,
-  ClockIcon,
-  LinkIcon,
-  PaperClipIcon,
-} from "@heroicons/react/24/outline";
+import { CalendarDaysIcon, ClockIcon } from "@heroicons/react/24/outline";
 import { Typography } from "@material-tailwind/react";
 
 export const EventCard = React.memo(function EventCard({ event }) {
@@ -33,7 +26,7 @@ export const EventCard = React.memo(function EventCard({ event }) {
 
   let formattedDuration = null;
   if (event.duration) {
-    const parts = event.duration.split(" ");
+    const parts = event.duration.trim().split(" ");
     formattedDuration = parts.length === 2 ? parts[1] : parts[0];
   }
 
@@ -68,16 +61,16 @@ export const EventCard = React.memo(function EventCard({ event }) {
         )}
       </div>
 
-      {/* Main event info row */}
-      <div className="flex flex-wrap items-center justify-between gap-6 text-sm text-gray-600">
-        <div className="flex flex-wrap items-center gap-6">
+      {/* ✅ Large screens layout (unchanged) */}
+      <div className="hidden sm:flex items-center justify-between text-sm text-gray-600 sm:text-xs flex-wrap gap-2">
+        <div className="flex items-center gap-4 flex-wrap">
           {eventDateTime && (
             <>
-              <div className="flex items-center gap-1 whitespace-nowrap">
+              <div className="flex items-center gap-1">
                 <CalendarDaysIcon className="w-4 h-4 text-green-600" />
                 <span>{dateString}</span>
               </div>
-              <div className="flex items-center gap-1 whitespace-nowrap">
+              <div className="flex items-center gap-1">
                 <ClockIcon className="w-4 h-4 text-green-600" />
                 <span>{timeString}</span>
               </div>
@@ -85,24 +78,62 @@ export const EventCard = React.memo(function EventCard({ event }) {
           )}
 
           {event.location && (
-            <div className="flex items-center gap-1 whitespace-nowrap">
+            <div className="flex items-center gap-1">
               <span>📍</span>
               <span>{event.location}</span>
             </div>
           )}
 
           {formattedDuration && (
-            <span className="text-xs text-gray-600 font-medium whitespace-nowrap">
+            <span className="text-xs font-medium text-gray-600 whitespace-nowrap">
               ⏱ {formattedDuration}
             </span>
           )}
         </div>
 
         {event.category && (
-          <span className="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs whitespace-nowrap ml-auto">
+          <span className="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs whitespace-nowrap">
             {event.category}
           </span>
         )}
+      </div>
+
+      {/* ✅ Small screen layout */}
+      <div className="flex flex-col sm:hidden gap-1 mt-2">
+        <div className="flex justify-between text-[11px] text-gray-700 font-medium">
+          {eventDateTime && (
+            <>
+              <div className="flex items-center gap-1">
+                <CalendarDaysIcon className="w-4 h-4 text-green-600" />
+                <span>{dateString}</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <ClockIcon className="w-4 h-4 text-green-600" />
+                <span>{timeString}</span>
+              </div>
+            </>
+          )}
+          {formattedDuration && (
+            <div className="flex items-center gap-1">
+              <span>⏱</span>
+              <span>{formattedDuration}</span>
+            </div>
+          )}
+        </div>
+
+        <div className="flex justify-end gap-3 text-[10px] text-gray-600">
+          {event.location && (
+            <div className="flex items-center gap-1 max-w-[100px] truncate">
+              <span>📍</span>
+              <span>{event.location}</span>
+            </div>
+          )}
+          {event.category && (
+            <span className="px-2 py-0.5 bg-green-100 text-green-800 rounded-full text-[10px]">
+              {event.category}
+            </span>
+          )}
+        </div>
       </div>
     </div>
   );

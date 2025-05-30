@@ -18,19 +18,21 @@ const EventFeed = ({ events, loading, error, user }) => {
   );
 
   return (
-    <div className="w-full max-w-7xl mx-auto px-6 lg:px-12 lg:py-8">
-      {events.length === 0 ? (
-        <div className="text-center py-12">
-          <p className="text-xl text-gray-500">No events found</p>
-        </div>
-      ) : (
-        <div className="grid gap-1 lg:gap-4">
-          {events.map((event) => (
-            <EventCard key={event.id} event={event} user={user} />
-          ))}
-        </div>
-      )}
-    </div>
+   <div className="w-full flex justify-center px-2 sm:px-4 md:px-6 lg:px-12 py-4 lg:py-8">
+  <div className="w-full max-w-3xl">
+    {events.length === 0 ? (
+      <div className="text-center py-12">
+        <p className="text-xl text-gray-500">No events found</p>
+      </div>
+    ) : (
+      <div className="grid gap-1 lg:gap-4">
+        {events.map((event) => (
+          <EventCard key={event.id} event={event} user={user} />
+        ))}
+      </div>
+    )}
+  </div>
+</div>
   );
 };
 

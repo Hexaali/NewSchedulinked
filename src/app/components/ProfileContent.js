@@ -11,8 +11,8 @@ import {
 import {
   GOOGLE_CLIENT_ID,
   GOOGLE_REDIRECT_URI,
-  GOOGLE_SCOPES,
   API_BASE_URL,
+  GOOGLE_SCOPES,
 } from "@/constants";
 import Image from "next/image";
 
@@ -28,8 +28,8 @@ export default function ProfileContent({ userData }) {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
-    first_name: userData?.first_name || "",
-    last_name: userData?.last_name || "",
+    first_name:  "",
+    last_name:  "",
   });
 
   useEffect(() => {
@@ -53,7 +53,7 @@ export default function ProfileContent({ userData }) {
               artist: payload.user_id,
               first_name: payload.first_name,
               last_name: payload.last_name,
-              google_code: code,
+              google_token: code,
             }),
           });
 

@@ -1,7 +1,7 @@
 "use client";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-
+import { API_BASE_URL } from "@/constants";
 import ProfileContent from "./ProfileContent";
 import LandingPage from "./LandingPage";
 import NotFound from "./NotFound";
@@ -18,7 +18,7 @@ export default function ProfilePageWrapper() {
     const fetchUserData = async () => {
       try {
         const res = await fetch(
-          `https://schedulinked.kayman.biz/api/v1/profile/${username}`
+          `${API_BASE_URL}/api/v1/profile/${username}`
         );
 
         if (res.ok) {

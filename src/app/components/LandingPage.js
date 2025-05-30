@@ -4,12 +4,49 @@ import SignupForm from "./SignUpForm";
 import ModalButtonForm from "./ModalButtonForm";
 import HeadingHomepage from "./HeadingHomepage";
 import { Button } from "@material-tailwind/react";
+import { API_BASE_URL } from "@/constants";
 
 export default function LandingPage() {
   const [openSignIn, setOpenSignIn] = useState(false);
   const [type, setType] = useState("artist");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const handleOAuthRedirect = async () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const code = urlParams.get("code");
+      const state = urlParams.get("state");
+
+      if (code && state) {
+        try {
+          const decoded = atob(state);
+          const payload = JSON.parse(decoded);
+
+          const response = await fetch(`${API_BASE_URL}/api/v1/follow`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              artist: payload.user_id,
+              first_name: payload.first_name,
+              last_name: payload.last_name,
+              google_token: code,
+            }),
+          });
+
+          const result = await response.json();
+          console.log("Follow result:", result);
+        } catch (error) {
+          console.error("Failed to handle Google OAuth redirect:", error);
+        }
+
+        const newUrl = window.location.origin + window.location.pathname;
+        window.history.replaceState({}, document.title, newUrl);
+      }
+    };
+
+    handleOAuthRedirect();
+  }, []);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
