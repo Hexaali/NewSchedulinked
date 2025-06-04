@@ -16,7 +16,7 @@ export default function HeadingHomepage() {
     <div className="text-center">
       {/* Schedulinked */}
       <div
-        className="uppercase text-4xl xl:text-7xl md:text-8xl font-bold 
+        className="uppercase text-3xl xl:text-7xl md:text-8xl font-bold 
         bg-gradient-to-br from-yellow-600 to-green-500 bg-clip-text text-transparent"
       >
         {"Schedulinked".split("").map((char, index) => (

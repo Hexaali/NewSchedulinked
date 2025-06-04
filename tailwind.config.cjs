@@ -9,20 +9,16 @@ module.exports = withMT({
   ],
   theme: {
     extend: {
+        backgroundImage: {
+        'gradient-light': 'linear-gradient(to bottom right, #ca8a04, #22c55e)', 
+        'gradient-dark': 'linear-gradient(to bottom right, #854d0e, #065f46)',
+      },
       textAlign: {
         'justify-center-last': 'justify; text-align-last: center;',
       },
       fontFamily: {
         alexBrush: ['Alex Brush', 'cursive'],
         poppins: ['Poppins', 'sans-serif',],
-      },
-      colors: {
-        brown: {
-          50: "#dfbe70",
-          100: "#0D2D59",//blue
-          200: "#FFBD59", //Golden
-          300: "#9c7830",
-        },
       },
     },
   },

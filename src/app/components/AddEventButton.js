@@ -70,7 +70,6 @@ export default function AddEventButton({ onNewEvent }) {
   const [selectedFollowers, setSelectedFollowers] = useState([]);
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
-  const [duration, setDuration] = useState("");
 
   const handleOpen = () => setOpen(!open);
 
@@ -84,33 +83,6 @@ export default function AddEventButton({ onNewEvent }) {
       setFollowers(formatted);
     }
   }, []);
-
-  const calculateDuration = (start, end) => {
-    const startDate = new Date(start);
-    const endDate = new Date(end);
-    const diff = endDate - startDate;
-
-    if (isNaN(diff) || diff <= 0) return "";
-
-    const seconds = Math.floor(diff / 1000);
-    const hh = String(Math.floor(seconds / 3600)).padStart(2, "0");
-    const mm = String(Math.floor((seconds % 3600) / 60)).padStart(2, "0");
-    const ss = String(seconds % 60).padStart(2, "0");
-
-    return `${hh}:${mm}:${ss}`;
-  };
-
-  useEffect(() => {
-    if (startTime && endTime) {
-      const start = new Date(startTime);
-      const end = new Date(endTime);
-      if (end > start) {
-        setDuration(calculateDuration(startTime, endTime));
-      } else {
-        setDuration("");
-      }
-    }
-  }, [startTime, endTime]);
 
   const formatUrl = (url) => {
     if (!url) return "";
@@ -134,13 +106,11 @@ export default function AddEventButton({ onNewEvent }) {
     }
 
     const formattedStart = start.toISOString().replace("T", " ").slice(0, 19);
-    const formattedDuration = duration ? `0 ${duration}` : null;
     const externalUrl = formatUrl(rawForm.get("link"));
 
     const jsonData = {
       title: rawForm.get("title"),
       time: formattedStart,
-      duration: formattedDuration,
       location: rawForm.get("location") || "Online",
       external_url: externalUrl,
       description: rawForm.get("description"),
@@ -168,7 +138,6 @@ export default function AddEventButton({ onNewEvent }) {
       setOpen(false);
       setStartTime("");
       setEndTime("");
-      setDuration("");
       setSelectedFollowers([]);
       e.target.reset();
     } catch (err) {
@@ -179,7 +148,10 @@ export default function AddEventButton({ onNewEvent }) {
 
   return (
     <>
-      <Button onClick={handleOpen} className="bg-gradient-to-tr from-green-500 to-yellow-400 text-black text-lg font-extrabold px-6 py-3 rounded-full shadow-md hover:scale-105 transition-transform">
+      <Button
+        onClick={handleOpen}
+        className="bg-gradient-to-tr from-green-500 to-yellow-400 text-black text-lg font-extrabold px-6 py-3 rounded-full shadow-md hover:scale-105 transition-transform"
+      >
         ➕ Add Event
       </Button>
 
@@ -195,11 +167,7 @@ export default function AddEventButton({ onNewEvent }) {
             <Input variant="standard" name="title" label="Event Title" required color="green" icon={<CalendarDaysIcon className="h-5 w-5 text-green-700" />} />
             <Input name="datetime" label="Start Time" type="datetime-local" required color="green" icon={<ClockIcon className="h-5 w-5 text-green-700" />} value={startTime} onChange={(e) => setStartTime(e.target.value)} />
             <Input name="endtime" label="End Time (optional)" type="datetime-local" color="green" icon={<ClockIcon className="h-5 w-5 text-green-700" />} value={endTime} onChange={(e) => setEndTime(e.target.value)} />
-
-            <Input variant="standard" label="Duration (optional)" placeholder="hh:mm:ss" value={duration} onChange={(e) => setDuration(e.target.value)} color="green" />
-
             <Input variant="standard" name="location" label="Location (URL or Online)" placeholder="e.g. Online or https://..." color="green" />
-
             <Textarea name="description" label="Description" required color="green" rows={4} className="resize-none" />
 
             {followers.length > 0 && (

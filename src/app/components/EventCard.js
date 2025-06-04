@@ -24,12 +24,6 @@ export const EventCard = React.memo(function EventCard({ event }) {
     minute: "2-digit",
   });
 
-  let formattedDuration = null;
-  if (event.duration) {
-    const parts = event.duration.trim().split(" ");
-    formattedDuration = parts.length === 2 ? parts[1] : parts[0];
-  }
-
   return (
     <div className="w-full max-w-2xl lg:max-w-3xl mx-auto bg-white rounded-xl border shadow-sm hover:shadow-md transition m-2 px-4 py-3">
       <div className="flex items-center gap-3 mb-3">
@@ -61,7 +55,7 @@ export const EventCard = React.memo(function EventCard({ event }) {
         )}
       </div>
 
-      {/* ✅ Large screens layout (unchanged) */}
+      {/* Large screens layout (unchanged) */}
       <div className="hidden sm:flex items-center justify-between text-sm text-gray-600 sm:text-xs flex-wrap gap-2">
         <div className="flex items-center gap-4 flex-wrap">
           {eventDateTime && (
@@ -83,12 +77,6 @@ export const EventCard = React.memo(function EventCard({ event }) {
               <span>{event.location}</span>
             </div>
           )}
-
-          {formattedDuration && (
-            <span className="text-xs font-medium text-gray-600 whitespace-nowrap">
-              ⏱ {formattedDuration}
-            </span>
-          )}
         </div>
 
         {event.category && (
@@ -98,7 +86,7 @@ export const EventCard = React.memo(function EventCard({ event }) {
         )}
       </div>
 
-      {/* ✅ Small screen layout */}
+      {/* Small screen layout */}
       <div className="flex flex-col sm:hidden gap-1 mt-2">
         <div className="flex justify-between text-[11px] text-gray-700 font-medium">
           {eventDateTime && (
@@ -112,12 +100,6 @@ export const EventCard = React.memo(function EventCard({ event }) {
                 <span>{timeString}</span>
               </div>
             </>
-          )}
-          {formattedDuration && (
-            <div className="flex items-center gap-1">
-              <span>⏱</span>
-              <span>{formattedDuration}</span>
-            </div>
           )}
         </div>
 

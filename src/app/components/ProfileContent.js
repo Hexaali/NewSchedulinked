@@ -28,8 +28,8 @@ export default function ProfileContent({ userData }) {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
-    first_name:  "",
-    last_name:  "",
+    first_name: "",
+    last_name: "",
   });
 
   useEffect(() => {
@@ -109,12 +109,25 @@ export default function ProfileContent({ userData }) {
         .then(console.log)
         .catch(console.error);
     }
+
     setOpenAppleModal(false);
+    setFormData({
+      email: "",
+      password: "",
+      first_name: "",
+      last_name: "",
+    });
   };
 
   const handleGoogleCalendarSubmit = () => {
     getGoogleCalendarToken();
     setOpenGoogleModal(false);
+    setFormData({
+      email: "",
+      password: "",
+      first_name: "",
+      last_name: "",
+    });
   };
 
   if (!userData) {
@@ -144,7 +157,7 @@ export default function ProfileContent({ userData }) {
           </div>
           <div className="flex flex-col leading-tight">
             <Typography variant="h4" className="text-white">
-              {`${capitalize(userData?.first_name)} ${capitalize(userData?.last_name)}`.trim() || "No Name"}
+              {(capitalize(userData?.first_name) + " " + capitalize(userData?.last_name)).trim() || "No Name"}
             </Typography>
             <Typography className="text-sm text-white mt-2">
               @{userData?.username || "No User"}
@@ -157,7 +170,7 @@ export default function ProfileContent({ userData }) {
             onClick={() => setOpenGoogleModal(true)}
             className="flex items-center justify-center gap-2 bg-gradient-to-r from-green-500 to-yellow-400 text-white py-3 rounded-full shadow-md hover:opacity-90 transition"
           >
-            <Image src="/google.png" alt="Apple" width={20} height={20} />
+            <Image src="/google.png" alt="Google" width={20} height={20} />
             Add to Google Calendar
           </Button>
 
@@ -175,9 +188,9 @@ export default function ProfileContent({ userData }) {
       <Dialog
         open={openGoogleModal}
         handler={() => setOpenGoogleModal(!openGoogleModal)}
-        className="dark:bg-gray-900 bg-white rounded-xl"
+        className="bg-gradient-light dark:bg-gradient-dark  rounded-xl"
       >
-        <DialogHeader className="text-xl font-semibold text-gray-800 dark:text-white">
+        <DialogHeader className="text-xl font-semibold text-white dark:text-white">
           Google Calendar Info
         </DialogHeader>
         <DialogBody className="flex flex-col gap-4">
@@ -206,9 +219,9 @@ export default function ProfileContent({ userData }) {
       <Dialog
         open={openAppleModal}
         handler={() => setOpenAppleModal(!openAppleModal)}
-        className="dark:bg-gray-900 bg-white rounded-xl"
+        className="bg-gradient-light dark:bg-gradient-dark rounded-xl"
       >
-        <DialogHeader className="text-xl font-semibold text-gray-800 dark:text-white">
+        <DialogHeader className="text-xl font-semibold text-white dark:text-white">
           Apple Calendar Login
         </DialogHeader>
         <DialogBody className="flex flex-col gap-4">
@@ -250,7 +263,7 @@ export default function ProfileContent({ userData }) {
           <Button variant="text" color="gray" onClick={() => setOpenAppleModal(false)}>
             Cancel
           </Button>
-          <Button className="bg-blue-600 text-white" onClick={handleAppleCalendarSubmit}>
+          <Button className="bg-green-600 text-white" onClick={handleAppleCalendarSubmit}>
             Submit
           </Button>
         </DialogFooter>

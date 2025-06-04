@@ -75,7 +75,8 @@ export default function SignupForm({ closeModal, type = "artist" }) {
     }
 
     // Parse name
-    let firstName = "", lastName = "";
+    let firstName = "",
+      lastName = "";
     const nameParts = firstname.trim().split(/\s+/);
     firstName = nameParts[0] || "";
     lastName = nameParts.slice(1).join(" ") || "_";
@@ -86,7 +87,7 @@ export default function SignupForm({ closeModal, type = "artist" }) {
     form.append("password", password);
     form.append("first_name", firstName);
     form.append("last_name", lastName);
-    form.append("type", type.toUpperCase()); 
+    form.append("type", type.toUpperCase());
     if (image) form.append("profile_picture", image);
 
     try {
@@ -137,7 +138,10 @@ export default function SignupForm({ closeModal, type = "artist" }) {
     >
       <div className="flex-1 overflow-y-auto scroll-pb-36 px-2 sm:px-8">
         <CardBody className="space-y-6 pb-6">
-          <Typography variant="h2" className="uppercase text-center font-extrabold pt-4 pb-2 text-xl">
+          <Typography
+            variant="h2"
+            className="uppercase text-center font-extrabold pt-4 pb-2 text-xl"
+          >
             Join as {type === "artist" ? "an Artist" : "a Business"}
           </Typography>
 
@@ -207,7 +211,9 @@ export default function SignupForm({ closeModal, type = "artist" }) {
             />
 
             <div className="relative pb-4">
-              <label className="block text-sm font-medium text-white mb-2">Profile Image (Optional)</label>
+              <label className="block text-sm font-medium text-white mb-2">
+                Profile Image (Optional)
+              </label>
               <div
                 className={`flex flex-col gap-3 bg-white px-3 py-2 rounded-md shadow-sm transition-all duration-200 ${
                   activeField === "image" ? "ring-2 ring-yellow-400" : ""
@@ -218,9 +224,13 @@ export default function SignupForm({ closeModal, type = "artist" }) {
                 tabIndex={0}
               >
                 <div className="flex items-center gap-3 cursor-pointer">
-                  <PhotoIcon className={`w-5 h-5 transition-colors duration-200 ${
-                    activeField === "image" ? "text-yellow-600" : "text-green-800"
-                  }`} />
+                  <PhotoIcon
+                    className={`w-5 h-5 transition-colors duration-200 ${
+                      activeField === "image"
+                        ? "text-yellow-600"
+                        : "text-green-800"
+                    }`}
+                  />
                   <span className="text-sm text-gray-700">Choose an image</span>
                   <input
                     type="file"
