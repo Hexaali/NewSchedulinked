@@ -4,7 +4,8 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Button, Alert } from "@material-tailwind/react";
-import LightDarkButton from "./LightDarkButton";
+import { Link } from "react-scroll";
+import { HiOutlineMenu, HiX } from "react-icons/hi";
 import ModalButtonForm from "./ModalButtonForm";
 import SignInForm from "./SIgnInForm";
 
@@ -16,6 +17,7 @@ export default function Navbar() {
   const [openSignUp, setOpenSignUp] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [hasUserQuery, setHasUserQuery] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const [alert, setAlert] = useState({
     show: false,
@@ -39,7 +41,10 @@ export default function Navbar() {
 
   const showAlert = (message, type = "green") => {
     setAlert({ show: true, message, type });
-    setTimeout(() => setAlert({ show: false, message: "", type: "green" }), 3000);
+    setTimeout(
+      () => setAlert({ show: false, message: "", type: "green" }),
+      3000
+    );
   };
 
   const handleLogout = () => {
@@ -48,7 +53,7 @@ export default function Navbar() {
     localStorage.removeItem("user");
     setIsLoggedIn(false);
     showAlert("You have been logged out.", "green");
-    navigate("/");  // Use React Router navigate instead of window.location.href
+    navigate("/");
   };
 
   const handleLogin = () => {
@@ -86,7 +91,8 @@ export default function Navbar() {
               unmount: { y: -100 },
             }}
             dismissible={{
-              onClose: () => setAlert({ show: false, message: "", type: "green" }),
+              onClose: () =>
+                setAlert({ show: false, message: "", type: "green" }),
             }}
           >
             {alert.message}
@@ -95,45 +101,109 @@ export default function Navbar() {
       )}
 
       {/* Navbar */}
-      <nav className="blurred fixed z-30 w-full p-4 px-4 sm:px-8 md:px-16 bg-white dark:bg-gray-900 shadow-md flex flex-wrap items-center justify-between backdrop-blur-md">
-        <div className="flex items-center">
+      <nav className="fixed z-30 w-full py-6 px-6 sm:px-8 md:px-24 bg-white/60 shadow-md flex items-center justify-between backdrop-blur-md">
+        <div
+          className="flex items-center gap-2 cursor-pointer"
+          onClick={() => navigate("/")}
+        >
           <Image
-            src="/SchedulinkedLogo.png"
+            src="/Schedulinked.png"
             alt="Schedulinked Logo"
-            width={120}
-            height={80}
-            className="w-28 sm:w-36 md:w-44 h-auto"
+            width={32}
+            height={32}
           />
+          <span className="font-extrabold text-2xl text-gray-800">
+            Schedulinked
+          </span>{" "}
+        </div>
+        <div className="hidden md:flex items-center gap-8 ml-auto">
+          <Link
+            to="how"
+            smooth={true}
+            duration={500}
+            offset={-80}
+            className="cursor-pointer text-sm text-gray-700 hover:text-black font-medium transition-colors"
+          >
+            How It Works
+          </Link>
+          <Link
+            to="pricing"
+            smooth={true}
+            duration={500}
+            offset={-80}
+            className="cursor-pointer text-sm text-gray-700 hover:text-black font-medium transition-colors"
+          >
+            Pricing
+          </Link>
+          <Button
+            size="sm"
+            onClick={handleSignUpOpen}
+            className="text-xs normal-case sm:text-sm md:text-sm bg-white text-black border border-black font-bold px-4 py-2 rounded-lg shadow-md hover:scale-105 transition-transform"
+          >
+            Sign In
+          </Button>
+          <Button
+            size="sm"
+            className="text-xs normal-case sm:text-sm md:text-sm bg-limeCustom text-black font-bold px-4 py-2 rounded-lg shadow-md hover:scale-105 transition-transform"
+          >
+            Get Started
+          </Button>
         </div>
 
-        <div className="flex items-center justify-end gap-4 sm:gap-6 md:gap-10 ml-auto">
-          {!(
-            pathname === "/" && hasUserQuery
-          ) && (
-            isLoggedIn ? (
-              <Button
-                onClick={handleLogout}
-                className="text-xs sm:text-sm md:text-base bg-red-500 text-white font-bold px-4 sm:px-5 md:px-6 py-2 sm:py-2.5 md:py-3 rounded-lg shadow-md hover:scale-105 transition-transform"
-              >
-                Logout
-              </Button>
-            ) : (
-              <Button
-                onClick={handleSignUpOpen}
-                className="text-xs sm:text-sm md:text-base bg-gradient-to-tr from-yellow-400 to-green-500 text-black font-bold px-4 sm:px-5 md:px-6 py-2 sm:py-2.5 md:py-3 rounded-lg shadow-md hover:scale-105 transition-transform"
-              >
-                Sign In
-              </Button>
-            )
-          )}
-
-          <div className="scale-90 sm:scale-100">
-            <LightDarkButton />
-          </div>
+        {/* Hamburger Icon */}
+        <div className="md:hidden ml-auto">
+          <button
+            onClick={() => setMenuOpen(!menuOpen)}
+            className="text-gray-600 focus:outline-none"
+          >
+            {menuOpen ? <HiX size={28} /> : <HiOutlineMenu size={28} />}
+          </button>
         </div>
       </nav>
 
-      {/* Modal Login Form */}
+      {/* Mobile Menu */}
+      {menuOpen && (
+        <div className="md:hidden fixed top-[64px] left-0 w-full bg-white shadow-md z-[40] py-4 px-8 flex flex-col gap-4">
+          <Link
+            to="how"
+            smooth={true}
+            duration={500}
+            offset={-80}
+            onClick={() => setMenuOpen(false)}
+            className="cursor-pointer text-gray-700 hover:text-black font-medium transition-colors"
+          >
+            How It Works
+          </Link>
+          <Link
+            to="pricing"
+            smooth={true}
+            duration={500}
+            offset={-80}
+            onClick={() => setMenuOpen(false)}
+            className="cursor-pointer text-gray-700 hover:text-black font-medium transition-colors"
+          >
+            Pricing
+          </Link>
+          <Button
+            size="sm"
+            onClick={() => {
+              setMenuOpen(false);
+              handleSignUpOpen();
+            }}
+            className="w-22 bg-white text-white font-bold py-2 rounded-lg shadow-md hover:scale-105 transition-transform"
+          >
+            Sign In
+          </Button>
+          <Button
+            size="sm"
+            onClick={() => setMenuOpen(false)}
+            className="w-22 bg-limeCustom text-black font-bold py-2 rounded-lg shadow-md hover:scale-105 transition-transform"
+          >
+            Get Started
+          </Button>
+        </div>
+      )}
+
       <ModalButtonForm open={openSignUp} handleOpen={handleSignUpOpen}>
         <SignInForm closeModal={handleLogin} />
       </ModalButtonForm>

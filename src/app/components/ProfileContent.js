@@ -188,7 +188,7 @@ export default function ProfileContent({ userData }) {
       <Dialog
         open={openGoogleModal}
         handler={() => setOpenGoogleModal(!openGoogleModal)}
-        className="bg-gradient-light dark:bg-gradient-dark  rounded-xl"
+        className="bg-gradient-light dark:bg-gradient-dark rounded-xl"
       >
         <DialogHeader className="text-xl font-semibold text-white dark:text-white">
           Google Calendar Info
@@ -198,11 +198,17 @@ export default function ProfileContent({ userData }) {
             label="First Name"
             value={formData.first_name}
             onChange={(e) => setFormData({ ...formData, first_name: e.target.value })}
+            inputMode="text"
+            style={{ fontSize: "16px" }}
+            crossOrigin={undefined}
           />
           <Input
             label="Last Name"
             value={formData.last_name}
             onChange={(e) => setFormData({ ...formData, last_name: e.target.value })}
+            inputMode="text"
+            style={{ fontSize: "16px" }}
+            crossOrigin={undefined}
           />
         </DialogBody>
         <DialogFooter className="gap-2">
@@ -229,23 +235,35 @@ export default function ProfileContent({ userData }) {
             label="First Name"
             value={formData.first_name}
             onChange={(e) => setFormData({ ...formData, first_name: e.target.value })}
+            inputMode="text"
+            style={{ fontSize: "16px" }}
+            crossOrigin={undefined}
           />
           <Input
             label="Last Name"
             value={formData.last_name}
             onChange={(e) => setFormData({ ...formData, last_name: e.target.value })}
+            inputMode="text"
+            style={{ fontSize: "16px" }}
+            crossOrigin={undefined}
           />
           <Input
             label="Apple ID"
             type="email"
             value={formData.email}
             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+            inputMode="email"
+            style={{ fontSize: "16px" }}
+            crossOrigin={undefined}
           />
           <Input
             label="App Password"
             type="password"
             value={formData.password}
             onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+            inputMode="text"
+            style={{ fontSize: "16px" }}
+            crossOrigin={undefined}
           />
           <Typography variant="paragraph" className="text-sm text-blue-600 dark:text-blue-400 mt-1">
             Don&apos;t have an app password?{" "}

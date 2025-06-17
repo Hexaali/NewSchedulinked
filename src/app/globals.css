@@ -2,8 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
-/* FOR IOS ZOOM FIX */
+body {
+  @apply font-sans;
+}
+.text-gradient-light {
+  @apply bg-text-gradient-light bg-clip-text text-transparent;
+}
 
+.text-gradient-dark {
+  @apply bg-text-gradient-dark bg-clip-text text-transparent;
+}
+/* FOR IOS ZOOM FIX */
 input[type="text"],
 input[type="password"],
 input[type="email"],

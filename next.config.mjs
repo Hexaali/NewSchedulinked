@@ -2,5 +2,5 @@
 export const output = 'export';
 // export const trailingSlash = true;
 export const images = {
-  unoptimized: true // Required for static exports
+  unoptimized: true 
 };

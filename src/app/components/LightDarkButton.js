@@ -13,7 +13,7 @@ export default function LightDarkButton() {
       className={`
         p-3 rounded-full 
         bg-gradient-to-br 
-        ${darkMode ? 'from-gray-800 to-gray-700' : 'from-yellow-300 to-yellow-500'} 
+        ${darkMode ? 'bg-gradient-dark' : 'bg-gradient-light'} 
         shadow-md hover:scale-110 
         transition-all duration-300 ease-in-out
         relative w-12 h-12

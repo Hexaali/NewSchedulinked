@@ -10,6 +10,7 @@ import {
   TagIcon,
 } from "@heroicons/react/24/outline";
 import { API_BASE_URL } from "@/constants";
+import Image from "next/image";
 
 export default function SignInForm({ closeModal }) {
   const router = useRouter();
@@ -175,12 +176,22 @@ export default function SignInForm({ closeModal }) {
           paddingBottom: keyboardVisible ? "2rem" : "1rem",
         }}
       >
-        <CardBody className="space-y-6 px-4">
+        <CardBody className="space-y-6 px-4 flex flex-col items-center">
+
+          <Image src="Schedulinked.png" alt="Schedulinked Logo" width="60" height="20" />
+
           <Typography
-            variant="h1"
-            className="uppercase text-center font-extrabold mb-4 text-xl"
+            variant="h3"
+            className="normal-case text-black text-center font-semibold mb-4 text-xl"
+
           >
-            Sign In
+            Welcome To Schedulinked
+          </Typography>
+           <Typography
+            variant="small"
+            className="normal-case text-center text-black font-semibold mb-4 "
+          >
+            The Smarter Way to Schedule.
           </Typography>
 
           <form ref={formRef} onSubmit={handleSubmit} className="space-y-4">

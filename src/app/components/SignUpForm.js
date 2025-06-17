@@ -267,7 +267,7 @@ export default function SignupForm({ closeModal, type = "artist" }) {
           fullWidth
           disabled={loading}
           onClick={handleSubmit}
-          className="font-bold flex items-center justify-center gap-2 transition-transform duration-300 bg-gradient-to-br to-green-500 from-yellow-400 shadow-lg"
+          className="font-bold flex items-center justify-center gap-2 transition-transform duration-300 bg-gradient-to-br to-green-500 from-yellow-400 dark:bg-gradient-button-dark shadow-lg"
         >
           {loading ? "Signing Up..." : "Sign Up"}{" "}
           <ArrowRightIcon className="w-5 h-5" />

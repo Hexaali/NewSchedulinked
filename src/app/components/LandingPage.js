@@ -2,9 +2,11 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import SignupForm from "./SignUpForm";
 import ModalButtonForm from "./ModalButtonForm";
-import HeadingHomepage from "./HeadingHomepage";
-import { Button } from "@material-tailwind/react";
+// import HeadingHomepage from "./HeadingHomepage";
+import { Button, Typography } from "@material-tailwind/react";
 import { API_BASE_URL } from "@/constants";
+import HeroSection from "./HeroSection";
+import SignInForm from "./SIgnInForm";
 
 export default function LandingPage() {
   const [openSignIn, setOpenSignIn] = useState(false);
@@ -64,25 +66,35 @@ export default function LandingPage() {
   };
 
   return (
-    <section className="relative flex items-center justify-center p-8 md:p-20 min-h-screen overflow-hidden bg-gradient-to-br from-yellow-600 to-green-500 dark:from-gray-900 dark:via-gray-800 dark:to-yellow-600">
-      <div className="absolute top-0 left-0 w-full h-full bg-black/60 z-10" />
-      <div className="flex flex-col items-center justify-center relative z-20 w-full md:w-1/2 text-center md:text-left px-4 pt-20">
-        <HeadingHomepage />
+    <HeroSection className="relative flex items-center justify-center p-8 md:p-20 min-h-screen overflow-hidden ">
+      <div className="w-4/5 h-screen flex flex-col items-center justify-center ">
+        {/* <HeadingHomepage /> */}
+        <Typography className="text-4xl md:text-6xl lg:text-7xl font-bold px-2 text-center leading-tight tracking-tight">
+          Marketing people actually want.
+        </Typography>
+        <Typography
+          variant="lead"
+          className="text-gray-600 py-4 text-2xl text-center"
+        >
+          Schedulinked puts your content straight into calendars — with
+          reminders, media, and automation — no inbox, no noise, just visibility
+          that works.
+        </Typography>
 
-        <div className="flex flex-row space-x-2 mt-6">
-          {!isLoggedIn && (
-            <Button
-              onClick={() => toggleModal("artist")}
-              className="bg-gradient-to-tr from-yellow-400 to-green-500 text-black"
-            >
-              Register as an Artist
-            </Button>
-          )}
+        <div className="flex flex-col lg:flex-row lg:space-x-6 space-y-4 lg:space-y-0 mt-6 items-center justify-center">
           <Button
-            onClick={() => toggleModal("business")}
-            className="bg-gradient-to-tr to-green-500 from-yellow-400 text-black"
+            variant="outlined"
+            size="md"
+            className="normal-case text-black text- text-md font-bold rounded-full shadow-lg bg-limeCustom border-limeCustom lg:mb-0 sm:mb-4"
           >
-            Register as a Business
+            Join The Waitlist
+          </Button>
+          <Button
+            variant="outlined"
+            size="md"
+            className="normal-case text-black font-bold rounded-full text-md"
+          >
+            See How It Works
           </Button>
         </div>
       </div>
@@ -90,6 +102,6 @@ export default function LandingPage() {
       <ModalButtonForm open={openSignIn} handleOpen={() => toggleModal(type)}>
         <SignupForm closeModal={() => toggleModal(type)} type={type} />
       </ModalButtonForm>
-    </section>
+    </HeroSection>
   );
 }

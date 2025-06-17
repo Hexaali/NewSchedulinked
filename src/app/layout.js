@@ -11,16 +11,15 @@ export const metadata = {
 export const viewport = {
   width: "device-width",
   initialScale: 1,
-  viewportFit: "cover", // fixes iOS address bar overlap
+  viewportFit: "cover", 
 };
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body>
+      <body className="font-sans">
         <UserProvider>
           <ThemeProvider>
-           
             {children}
           </ThemeProvider>
         </UserProvider>
